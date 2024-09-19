@@ -1,0 +1,48 @@
+﻿@model CategoryModel
+@{
+    ViewData["title"] = "Create Category";
+}
+<h4>Create Category</h4>
+
+@* form them sp: để mở trang này : ta vào đg dẫn https://localhost:7135/admin, sau đó bấm add product để chuyển sang trang thêm sp *@
+<div class="col-md-9">
+    <form asp-action="Create" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-group">
+            <label>Name</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label>Description</label>
+            <textarea asp-for="Description" class="form-control"> </textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label>Status</label>
+            <select asp-for="Status" class="form-control" >
+                <option value="1">Hiển thị</option>
+                <option value="0">Ẩn</option>
+            </select>
+            <span asp-validation-for="Status" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <button class=" btn btn-primary">Create</button>
+        </div>
+    </form>
+    <a asp-action="Index">Back to List Category</a>
+</div>
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    @* ta se cài ckEDITOR4 để có thể chỉnh sửa cỡ chữ, kiểu chữ trong phần description(mô tả).
+    giống như ta nhúng word vào trang web vậy, ng dùng có thể trang trí chữ trong phần description
+Lưu ý cái này chỉ AD cho texarea thôi  *@
+
+}

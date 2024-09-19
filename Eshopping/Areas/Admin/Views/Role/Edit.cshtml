@@ -1,0 +1,36 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model IdentityRole
+@{
+    ViewData["title"] = "Edit Role";
+}
+<h4>Edit Role</h4>
+
+@* form them sp: để mở trang này : ta vào đg dẫn https://localhost:7135/admin, sau đó bấm add product để chuyển sang trang thêm sp *@
+<div class="col-md-9">
+    <form asp-action="Edit" enctype="multipart/form-data">
+        <input type="hidden" asp-for="Id"/>
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-group">
+            <label>Name</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <button class=" btn btn-primary">Update</button>
+        </div>
+    </form>
+    <a asp-action="Index">Back to List Role</a>
+</div>
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    @* ta se cài ckEDITOR4 để có thể chỉnh sửa cỡ chữ, kiểu chữ trong phần description(mô tả).
+    giống như ta nhúng word vào trang web vậy, ng dùng có thể trang trí chữ trong phần description
+Lưu ý cái này chỉ AD cho texarea thôi  *@
+
+}

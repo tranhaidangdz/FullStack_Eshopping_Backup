@@ -1,0 +1,48 @@
+﻿
+@{
+    ViewData["title"] = "User Listed";
+}
+<h4>List User </h4>
+@* thêm sửa xóa sp: *@
+<a class="btn btn-warning btn-sm" asp-action="Create" asp-controller="User">Add User</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">STT</th>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">PasswordHash</th>
+
+            <th scope="col">Phone</th>
+            <th scope="col">Role name</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var usersWithRoles in Model)
+        {
+            <tr>
+                @* hiển thị sp từ csdl dưới dạng 1 bảng: sau này khi chèn thêm các sp vào csdl nó sẽ in ra thông  tin ở đây  *@
+                <th>&bull;</th>
+
+                <td>@usersWithRoles.User.Id</td>
+                <td>@usersWithRoles.User.UserName</td>
+                <td>@usersWithRoles.User.Email</td>
+
+                @* Phương thức Html.Raw() sẽ render thô nội dung HTML thay vì escape các ký tự đặc biệt *@
+                <td>@usersWithRoles.User.PasswordHash</td>
+
+                <td>@usersWithRoles.User.PhoneNumber</td>
+                 @* <td>@usersWithRoles.RoleName</td> *@
+                 <td>@usersWithRoles.User.RoleId</td>
+                <td>
+                    @* chỉnh sửa or xóa sp trong admin nó sẽ dựa vào id của sp đó, từ id đó trả  về thông tin sp *@
+                    <a asp-action="Edit" class="btn btn-warning btn-sm" asp-controller="User" asp-route-Id="@usersWithRoles.User.Id">Edit</a>
+                    <a asp-action="Delete" class="btn btn-danger btn-sm confirmDeletion" asp-controller="User" asp-route-Id="@usersWithRoles.User.Id">Delete</a>
+                </td>
+            </tr>
+
+        }
+    </tbody>
+</table>

@@ -1,0 +1,40 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model IEnumerable<IdentityRole>
+@{
+    ViewData["title"] = "List Role";
+}
+<h4>List Role </h4>
+@* thêm sửa xóa sp: *@
+<a class="btn btn-warning btn-sm" asp-action="Create" asp-controller="Role">Add Role</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">STT</th>
+            <th scope="col">Id</th>
+            <th scope="col">Role Name</th>
+       @*      <th scope="col">Role</th> *@
+            <th scope="col">Action</th>
+
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th>&bull;</th>
+                @* hiển thị sp từ csdl dưới dạng 1 bảng: sau này khi chèn thêm các sp vào csdl nó sẽ in ra thông  tin ở đây  *@
+                <td >@item.Id</td>
+                <td>@item.Name</td>
+
+
+                <td>
+                    @* chỉnh sửa or xóa sp trong admin nó sẽ dựa vào id của sp đó, từ id đó trả  về thông tin sp *@
+                    <a asp-action="Edit" class="btn btn-warning btn-sm" asp-controller="Role" asp-route-id="@item.Id">Edit</a>
+                    <a asp-action="Delete" class="btn btn-danger btn-sm confirmDeletion" asp-controller="Role" asp-route-Id="@item.Id">Delete</a>
+                </td>
+            </tr>
+
+        }
+    </tbody>
+</table>

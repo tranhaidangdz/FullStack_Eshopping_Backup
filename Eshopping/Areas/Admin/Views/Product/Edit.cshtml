@@ -1,0 +1,72 @@
+﻿@model ProductModel
+@{
+    ViewData["title"] = "Edit Product";
+}
+<h4>Edit Product</h4>
+
+@* form them sp: để mở trang này : ta vào đg dẫn https://localhost:7135/admin, sau đó bấm add product để chuyển sang trang thêm sp *@
+<div class="col-md-9">
+    <form asp-action="Edit" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-group">
+            <label>Name</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label>Price</label>
+            <input asp-for="Price" class="form-control" />
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label>Description</label>
+            <textarea asp-for="Description" class="form-control"> </textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label>Category</label>
+            <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.Categories">
+                <option>--Choose a category</option>
+            </select>
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label>Brand</label>
+            <select asp-for="BrandId" class="form-control" asp-items="ViewBag.Brands">
+                <option>--Choose a brand</option>
+            </select>
+            <span asp-validation-for="BrandId" class="text-danger"></span>
+        </div>
+        @* them hinh anh: *@
+        <div class="form-group">
+            <label>Image</label>
+            <input asp-for="ImageUpload" class="form-control" />
+            <span asp-validation-for="Image" class="text-danger"></span>
+            <img src="~/media/products/@Model.Image" width="120" />
+
+        </div>
+        <div class="form-group">
+            <button class=" btn btn-primary">Update</button>
+        </div>
+    </form>
+    <a asp-action="Index">Back to List Product</a>
+</div>
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    @* ta se cài ckEDITOR4 để có thể chỉnh sửa cỡ chữ, kiểu chữ trong phần description(mô tả).
+    giống như ta nhúng word vào trang web vậy, ng dùng có thể trang trí chữ trong phần description
+Lưu ý cái này chỉ AD cho texarea thôi  *@
+
+    <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace('Description');
+    </script>
+}

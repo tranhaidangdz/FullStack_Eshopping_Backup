@@ -1,0 +1,45 @@
+﻿@model LoginViewModel
+
+@{
+	ViewData["Title"] = "Register";
+}
+<section id="">
+	<!--form-->
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-8 col-sm-offset-1">
+				<div class="login-form">
+					<!--login form-->
+					<h2>Login to your account</h2>
+					<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+					<form asp-action="Login" asp-controller="Account">
+						<div class="form-group">
+							<label>Username</label>
+							<input asp-for="Username" class="form-control" />
+							<span asp-validation-for="Username" class="text-danger"></span>
+						</div>
+
+						<div class="form-group">
+							<label> Password</label>
+							<input asp-for="Password" class="form-control" />
+							<span asp-validation-for="Password" class="text-danger"></span>
+						</div>
+						<button class="btn btn-default">Login</button>
+						<a asp-action="Create" asp-controller="Account">Tạo tài khoản mới</a>
+
+					</form>
+				</div><!--/login form-->
+			</div>
+		</div>
+	</div>
+</section><!--/form-->
+@section Scripts
+{
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+	@* ta se cài CKEDITOR4 để có thể chỉnh sửa cỡ chữ, kiểu chữ trong phần description(mô tả).
+    giống như ta nhúng word vào trang web vậy, ng dùng có thể trang trí chữ trong phần description
+Lưu ý cái này chỉ AD cho texarea thôi  *@
+
+}
