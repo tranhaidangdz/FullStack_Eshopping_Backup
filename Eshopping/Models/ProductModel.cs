@@ -17,6 +17,7 @@ namespace Eshopping.Models
       
         [Required(ErrorMessage = "Yêu cầu nhập giá sản phẩm")]
         [Range(0.01, double.MaxValue, ErrorMessage = "Giá sản phẩm phải lớn hơn 0")]
+        [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
         public int BrandId { get; set; }
         public int CategoryId { get; set; }

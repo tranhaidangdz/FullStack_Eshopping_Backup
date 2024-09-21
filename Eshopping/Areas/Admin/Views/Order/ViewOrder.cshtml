@@ -1,44 +1,83 @@
 ﻿@model IEnumerable<OrderDetails>
 @{
     ViewData["title"] = "Order Details";
+    decimal subtotal = 0;
+    decimal total = 0; //tổng tiền theo sp và tổng tất cả tiền 
+
 }
 
 <h4>List Order </h4>
 <table class="table">
     <thead>
         <tr>
-            <th scope="col">#</th>
+            <th scope="col">id</th>
             <th scope="col">Order Code</th>
             <th scope="col">Username</th>
-            <th scope="col">Order Date</th>
-            <th scope="col">Order Status</th>
+            <th scope="col">Product Name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Subtotal</th>
 
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
+            subtotal = item.Quantity * item.Price;
+            total += subtotal;
             <tr>
-                <th>#</th>
-                <th scope="row">@item.OrderCode</th>
-@*                 <td>@item.UserName</td>
+                @* ta trả về ordercode của sản phẩm đó , sau đó code ajax ở dưới sẽ xử lý trạng thái 0,1 của sản phẩm *@
+               <input type="hidden" asp-for="@item.OrderCode" class="getId"/>  
 
-                <td>@item.CreateDate</td>
+                <td>@item.Id</td>
+                <td>@item.OrderCode</td>
+                <td>@item.UserName</td>
+                <td>@item.Product.Name</td>
+                <td>$ @item.Price</td>
+                <td>@item.Quantity</td>
+                <td>$@subtotal.ToString("")</td>
 
-                <td>
-                    @if (item.Status == 1)
-                    {
-                        <span class="text text-success">Đơn hàng mới</span>
-                    }
-                    else
-                    {
-                        <span class="text text-danger">Đơn hàng thành công</span>
-                    }
-                </td>
- *@
-             
             </tr>
 
         }
+        <tr>
+            <th colspan="5">Total:</th>
+            <td>$@total.ToString()</td>
+            <td>
+                <select class="form-control select-update-order">
+    <option value="1">Đơn hàng mới</option>
+    <option value="0">Đã xử lý</option>
+        </select>
+            </td>
+        </tr>
     </tbody>
 </table>
+
+@* đoạn code ajax: *@
+@section Scripts{
+<script>
+    $(document).ready(function () {  //ta có 1 hàm
+        $('.select-update-order').change(function () {  //nó sẽ thay đổi class trong thẻ select ở trên để chuyển trạng thái 0,,1 giữa các sp(0 là chưa đc cập nhật còn 1 là đã cập nhật )
+            var status = $(this).val();  //lấy trạng thái đơn hàng (trạng thái 0,1 )
+            var ordercode = $('.getId').val();  //lấy thông tin sp có id đó từ csdl để lát ss 
+            $.ajax({
+                type: "POST",  //phương thức post giống php: lấy thông tin ng dùng nhập từ input 
+                url: "@Url.Action("UpdateOrder")",  //hàm updateorder trong order controller 
+                data: { status: status, ordercode: ordercode }, // Send data to the server 
+
+                success: function (result) {
+                    // Handle successful update
+                    if (result.success) {
+                        // Update UI or show success message
+                        Swal.fire("Cập nhật đơn hàng thành công");
+                    } else {
+                        // Handle error
+                        Swal.fire("Cập nhật đơn hàng thất bại");
+
+                    }
+                }
+            });
+        });
+        });
+ </script>
+}

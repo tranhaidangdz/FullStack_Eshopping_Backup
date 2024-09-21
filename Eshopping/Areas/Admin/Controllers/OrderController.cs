@@ -25,5 +25,27 @@ namespace Eshopping.Areas.Admin.Controllers
 			var DetailsOrder = await _dataContext.OrderDetails.Include(od => od.Product).Where(od => od.OrderCode == ordercode).ToListAsync();
 			return View(DetailsOrder);
 		}
+
+		//cập nhật trạng thái sản phẩm: 0=đã xử lý, 1=đơn hàng mới
+		[HttpPost]
+		[Route("UpdateOrder")]
+		public async Task<IActionResult> UpdateOrder(string ordercode,int status)
+		{
+			var order = await _dataContext.Orders.FirstOrDefaultAsync(o=>o.OrderCode == ordercode);  //lấy ra sp có ordercode giống ordercode mình nhập vào 
+			if (order == null)
+			{
+				return NotFound();
+			}
+			order.Status = status;
+			try
+			{
+				await _dataContext.SaveChangesAsync();
+				return Ok(new { success = true, message = "Cập nhật trạng thái đơn hàng thành công !" });
+			}catch(Exception ex)
+			{
+				return StatusCode(500, "An error orcurred while updating the order status!");
+			}
+		}
+
 	}
 }
