@@ -8,6 +8,10 @@
 	<meta name="author" content="">
 	<title>Home | E-Shopper</title>
 	<link href="~/css/bootstrap.min.css" rel="stylesheet">
+	@* css  sweet alert: nó sẽ hiện của sổ nhỏ thông bão giữa màn hình *@
+	<link href="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.14.0/dist/sweetalert2.min.css
+" rel="stylesheet">
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.1/css/font-awesome.css" rel="stylesheet">
 	<link href="~/css/prettyPhoto.css" rel="stylesheet">
 	<link href="~/css/price-range.css" rel="stylesheet">
@@ -403,6 +407,11 @@
 	<script src="~/js/price-range.js"></script>
 	<script src="~/js/jquery.prettyPhoto.js"></script>
 	<script src="~/js/main.js"></script>
+	@* JS cho  SWEET ALERT *@
+	<script src="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.14.0/dist/sweetalert2.all.min.js
+"></script>
+
 	@await RenderSectionAsync("Scripts", required: false);
 </body>
 

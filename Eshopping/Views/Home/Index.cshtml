@@ -27,9 +27,9 @@
 							<p>Thương hiệu : @item.Brand.Name</p>
 							</a>
 
-							<a  class="btn btn-default add-to-cart" asp-action="Add" asp-controller="Cart" asp-route-Id="@item.Id">
-								<i class="fa fa-shopping-cart" ></i>Add to cart
-							</a>
+							<button class="btn btn-default add-to-cart" data-product_id="@item.Id">
+								<i class="fa fa-shopping-cart" ></i>Thêm giỏ hàng 
+							</button>
 						</div>
 						
 @*  PHẦN HOVER ĐỂ HIỆN GIÁ TRÊN SẢN PHẨM :TA TẮT NÓ ĐI ĐỂ KHI BẤM VAO SP NÓ MỚI CHUYỂN TRANG PRODUCT ĐC 
@@ -499,3 +499,26 @@
 	</div><!--/recommended_items-->
 
 </div>
+
+@* thay vì dùng form để thêm giỏ hàng ta sẽ dùng code ajax cho gọn : đây là thêm giỏ hàng ở trang chủ,còn thêm sp trong admin vẫn dùng code c#  *@
+@section Scripts {
+<script>
+	$(document).ready(function () {
+		$('.add-to-cart').click(function () {  //khi ta bấm nút thêm sp
+			var Id = $(this).data("product_id");  //nó sẽ lấy id sp đó 
+			//alert(product_id);
+			$.ajax({
+				type: "POST",
+				url: "@Url.Action("Add", "Cart")",  //từ id đó gửi đến hàm add trong CartController 
+				data: { Id: Id }, // Send data to the server
+				success: function (result) {
+					// Handle successful update
+					if (result) {
+						Swal.fire("Thêm giỏ hàng thành công!");
+					}
+				}
+			});
+		});
+	});
+</script>
+}
