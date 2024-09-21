@@ -6,13 +6,13 @@
 <h4>List Role </h4>
 @* thêm sửa xóa sp: *@
 <a class="btn btn-warning btn-sm" asp-action="Create" asp-controller="Role">Add Role</a>
-<table class="table">
+<table class="table" id="myTable">
     <thead>
         <tr>
             <th scope="col">STT</th>
             <th scope="col">Id</th>
             <th scope="col">Role Name</th>
-       @*      <th scope="col">Role</th> *@
+           <th scope="col">Role</th> 
             <th scope="col">Action</th>
 
 
@@ -22,7 +22,7 @@
         @foreach (var item in Model)
         {
             <tr>
-                <th>&bull;</th>
+                <td>&bull;</td>
                 @* hiển thị sp từ csdl dưới dạng 1 bảng: sau này khi chèn thêm các sp vào csdl nó sẽ in ra thông  tin ở đây  *@
                 <td >@item.Id</td>
                 <td>@item.Name</td>
@@ -38,3 +38,11 @@
         }
     </tbody>
 </table>
+@* database JS: tìm kiếm dữ liệu từ bảng có id="mytable" ở trên
+	-VD ta có thể nhập tên, id, mã sp ... miến có thông tin nào khớp nó sẽ hiển thị ra sp đó
+	*@
+@section Scripts {
+    <script>
+        let table = new DataTable('#myTable');  //nó gọi đến id của thẻ table ở trên =>> render ra thông tin theo dạng bảng này để tìm
+    </script>
+}

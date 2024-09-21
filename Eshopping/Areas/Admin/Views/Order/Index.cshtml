@@ -4,7 +4,7 @@
 }
 
 <h4>List Order </h4>
-<table class="table">
+<table class="table" id="myTable">
     <thead>
         <tr>
             <th scope="col">STT</th>
@@ -12,6 +12,7 @@
             <th scope="col">Username</th>
             <th scope="col">Order Date</th>
             <th scope="col">Order Status</th>
+            <th scope="col">Action</th>
   
         </tr>
     </thead>
@@ -47,3 +48,11 @@
         }
     </tbody>
 </table>
+@* database JS: tìm kiếm dữ liệu từ bảng có id="mytable" ở trên
+	-VD ta có thể nhập tên, id, mã sp ... miến có thông tin nào khớp nó sẽ hiển thị ra sp đó
+	*@
+@section Scripts {
+    <script>
+        let table = new DataTable('#myTable');  //nó gọi đến id của thẻ table ở trên =>> render ra thông tin theo dạng bảng này để tìm
+    </script>
+}

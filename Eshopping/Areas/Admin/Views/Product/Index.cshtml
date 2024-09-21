@@ -15,7 +15,7 @@
 <h4>List Product </h4>
 @* thêm sửa xóa sp: *@
 <a class="btn btn-warning btn-sm" asp-action="Create" asp-controller="Product">Add Product</a>
-<table class="table">
+<table class="table" id="myTable">
 	<thead>
 		<tr>
 			<th scope="col">STT</th>
@@ -26,6 +26,7 @@
 			<th scope="col">Product Slug</th>
 			<th scope="col">Product Cayegory</th>
 			<th scope="col">Product Brand</th>
+			<th scope="col">Action</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -55,4 +56,12 @@
 		}
 	</tbody>
 </table>
+	@* database JS: tìm kiếm dữ liệu từ bảng có id="mytable" ở trên
+	-VD ta có thể nhập tên, id, mã sp ... miến có thông tin nào khớp nó sẽ hiển thị ra sp đó
+	*@
+	@section Scripts {
+		<script>
+			let table = new DataTable('#myTable');  //nó gọi đến id của thẻ table ở trên =>> render ra thông tin theo dạng bảng này để tìm
+		</script>
+	}
 <partial name="_paging" model="@pager"></partial>

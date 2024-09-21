@@ -15,7 +15,7 @@
 <h4>List Brand </h4>
 @* thêm sửa xóa sp: *@
 <a class="btn btn-warning btn-sm" asp-action="Create" asp-controller="Brand">Add Brand</a>
-<table class="table">
+<table class="table" id="myTable">
     <thead>
         <tr>
             <th scope="col">STT</th>
@@ -24,6 +24,7 @@
 
             <th scope="col">Brand Slug</th>
             <th scope="col">Brand Status</th>
+            <th scope="col">Action</th>
 
         </tr>
     </thead>
@@ -59,5 +60,21 @@
 
         }
     </tbody>
+
 </table>
+@* database JS: tìm kiếm dữ liệu từ bảng có id="mytable" ở trên
+	-VD ta có thể nhập tên, id, mã sp ... miến có thông tin nào khớp nó sẽ hiển thị ra sp đó
+    -lưu ý về lỗi số cột không khớp với tiêu đề bảng:
+    Lỗi "Incorrect column count" xảy ra vì số lượng cột thực tế trong bảng không khớp với số lượng tiêu đề trong phần <thead>. Hiện tại trong bảng của bạn có 5 tiêu đề
+        (các cột: STT, Brand Name, Brand Description, Brand Slug, Brand Status), nhưng phần dữ liệu bên trong bảng có thêm một cột thao tác chứa các nút "Edit" và "Delete".
+        Điều này khiến số lượng cột dữ liệu nhiều hơn số lượng tiêu đề, dẫn đến lỗi.
+        => có 5 tiêu đề mà chỉ csó 4 cột => DB table JS ko hoạt động 
+        Cách khắc phục:
+        Bạn cần thêm một cột tiêu đề trong phần <thead> để khớp với cột thao tác ở phần <tbody>. Cột này có thể được đặt tên là "Actions" hoặc "Operations".
+	*@
+@section Scripts {
+    <script>
+        let table = new DataTable('#myTable');  //nó gọi đến id của thẻ table ở trên =>> render ra thông tin theo dạng bảng này để tìm
+    </script>
+}
 <partial name="_paging" model="@pager"></partial>

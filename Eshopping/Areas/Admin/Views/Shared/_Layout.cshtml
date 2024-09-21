@@ -11,6 +11,10 @@
 	<link href="
 https://cdn.jsdelivr.net/npm/sweetalert2@11.14.0/dist/sweetalert2.min.css
 " rel="stylesheet">
+
+	@* đg dẫn CSS để sd databasetable JS *@
+	<link href="//cdn.datatables.net/2.1.7/css/dataTables.dataTables.min.css" rel="stylesheet">
+
 	<link href="~/css/bootstrap.min.css" rel="stylesheet">
 	<link href="~/css/font-awesome.min.css" rel="stylesheet">
 	<link href="~/css/prettyPhoto.css" rel="stylesheet">
@@ -117,6 +121,9 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.14.0/dist/sweetalert2.min.css
 	<script src="~/js/jquery.scrollUp.min.js"></script>
 	<script src="~/js/price-range.js"></script>
 	<script src="~/js/jquery.prettyPhoto.js"></script>
+	@* đg dẫn JS để sd databasetable JS *@
+	<script src="//cdn.datatables.net/2.1.7/js/dataTables.min.js"></script>
+
 	<script src="~/js/main.js"></script>
 	<script src="~/backend/js/site.js"></script>
 	@* JS cho  SWEET ALERT *@
@@ -153,10 +160,13 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.14.0/dist/sweetalert2.all.min.js
 });
 
 		</script>
+
+
 	@* ta dùng await: bất đồng bộ: khi ta khởi chạy 1 dự án nó sẽ chạy các file JS ở trên trc, còn đoạn code JS của các trang sẽ chỉ chạy khi ta mở đến trang đó  
 		-nó sẽ render thẻ section có script ,chạy đoạn code trong đó 
 
 	*@
+
 	@await RenderSectionAsync("Scripts", required: false);
 </body>
 
