@@ -17,12 +17,17 @@ namespace Eshopping.Controllers
 		}
 		public async Task<IActionResult> Details(int Id)
 		{
-			var productsById = _dataContext.Products.Where(p => p.Id == Id).FirstOrDefault();
 			// Nếu không tìm thấy sản phẩm, chuyển hướng về trang Index
-			if (productsById == null)
+			if (Id == null)
 			{
 				return RedirectToAction("Index");
 			}
+			var productsById = _dataContext.Products.Where(p => p.Id == Id).FirstOrDefault();
+			//realated product: sp liên quan:
+			var relatedProducts= await _dataContext.Products
+				.Where(p=>p.CategoryId==productsById.CategoryId&&p.Id!=productsById.Id).Take(4).ToListAsync();  //lấy những sp có cùng category  với sp A, nhưng lại khác nhau về id (các sp khác nhau, nhưng cùng 1 danh mục category) 
+
+			ViewBag.RelatedProducts = relatedProducts;  //đầy vào 1 CTDL viewBag
 			// Trả về view với sản phẩm đã tìm thấy
 			return View(productsById);
 		}
