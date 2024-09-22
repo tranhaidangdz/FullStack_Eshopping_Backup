@@ -21,7 +21,7 @@
 						<div class="productinfo text-center">
 
 							<img src="~/media/products/@item.Image" alt="@item.Name" width="100%" />
-							<h2>$@item.Price.ToString("#,##0 VNĐ")</h2>
+							<h2>@item.Price.ToString("#,##0 VNĐ")</h2>
 							<p>Tên sản phẩm : @item.Name</p>
 							<p>Danh mục : @item.Category.Name</p>
 							<p>Thương hiệu : @item.Brand.Name</p>
@@ -32,7 +32,7 @@
 						@* đoạn code này để khi hover sp nó sẽ hiện 1 lớp đè lên lớp cũ, ta chỉnh nút add to cart giống với nút ở trên => nó cũng có thể add vào giỏ hàng  *@
 						<div class="product-overlay">
 							<div class="overlay-content">
-								<h2>$@item.Price.ToString("#,##0 VNĐ")</h2>
+								<h2>@item.Price.ToString("#,##0 VNĐ")</h2>
 								<p>@item.Name</p>
 								<a class="btn btn-default add-to-cart" asp-action="Add" asp-controller="Cart" asp-route-Id="@item.Id">
 									<i class="fa fa-shopping-cart"></i>Add to cart

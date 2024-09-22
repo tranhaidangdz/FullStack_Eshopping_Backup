@@ -38,7 +38,8 @@ namespace Eshopping.Controllers
 			// Trả về view với sản phẩm đã tìm thấy
 			return View(viewModel);
 		}
-		//tim kiếm sản phẩm:
+		//tim kiếm sản phẩm:ta phải để phương thức httpPost,nếu ko nó mặc định là httpGet. ta để post tức là lấy từ khóa do ng dùng nhập vào 
+		[HttpPost]
 		public async Task<IActionResult> Search(string searchTerm)
 		{
 			var products=await _dataContext.Products.Where(p=>p.Name.Contains(searchTerm)||p.Description.Contains(searchTerm)).ToListAsync();  //ta tìm kiếm sp mà trong tên và mô tả của nó có chứa từ khóa tìm kiếm mà ta nhập vào 
