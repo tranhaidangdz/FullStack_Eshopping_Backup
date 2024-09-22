@@ -1,4 +1,6 @@
-﻿using Eshopping.Repository;
+﻿using Eshopping.Models;
+using Eshopping.Models.ViewModels;
+using Eshopping.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,14 +24,19 @@ namespace Eshopping.Controllers
 			{
 				return RedirectToAction("Index");
 			}
-			var productsById = _dataContext.Products.Where(p => p.Id == Id).FirstOrDefault();
+			var productsById = _dataContext.Products.Include(p=>p.Ratings).Where(p => p.Id == Id).FirstOrDefault();
 			//realated product: sp liên quan:
-			var relatedProducts= await _dataContext.Products
-				.Where(p=>p.CategoryId==productsById.CategoryId&&p.Id!=productsById.Id).Take(4).ToListAsync();  //lấy những sp có cùng category  với sp A, nhưng lại khác nhau về id (các sp khác nhau, nhưng cùng 1 danh mục category) 
+			var relatedProducts= await _dataContext.Products.Where(p=>p.CategoryId==productsById.CategoryId&&p.Id!=productsById.Id).Take(4).ToListAsync();  //lấy những sp có cùng category  với sp A, nhưng lại khác nhau về id (các sp khác nhau, nhưng cùng 1 danh mục category) 
 
 			ViewBag.RelatedProducts = relatedProducts;  //đầy vào 1 CTDL viewBag
+
+			var viewModel = new ProductDetailsViewModel
+			{
+				ProductDetails = productsById,
+				RatingDetails=productsById.Ratings
+			};
 			// Trả về view với sản phẩm đã tìm thấy
-			return View(productsById);
+			return View(viewModel);
 		}
 		//tim kiếm sản phẩm:
 		public async Task<IActionResult> Search(string searchTerm)
@@ -38,6 +45,10 @@ namespace Eshopping.Controllers
 			ViewBag.Keyword=searchTerm;  //hiển thị từ khóa tìm kiếm đó ra trang web 
 			ViewBag.ProductCount = products.Count;  // Kiểm tra số lượng sản phẩm
 			return View(products);
+		}
+		public IActionResult CommentProduct(RatingModel rating)
+		{
+			return RedirectToAction("Details","Product");
 		}
 	}
 }
