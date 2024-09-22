@@ -1,5 +1,6 @@
 ﻿using Eshopping.Repository;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Eshopping.Controllers
 {
@@ -24,6 +25,14 @@ namespace Eshopping.Controllers
 			}
 			// Trả về view với sản phẩm đã tìm thấy
 			return View(productsById);
+		}
+		//tim kiếm sản phẩm:
+		public async Task<IActionResult> Search(string searchTerm)
+		{
+			var products=await _dataContext.Products.Where(p=>p.Name.Contains(searchTerm)||p.Description.Contains(searchTerm)).ToListAsync();  //ta tìm kiếm sp mà trong tên và mô tả của nó có chứa từ khóa tìm kiếm mà ta nhập vào 
+			ViewBag.Keyword=searchTerm;  //hiển thị từ khóa tìm kiếm đó ra trang web 
+			ViewBag.ProductCount = products.Count;  // Kiểm tra số lượng sản phẩm
+			return View(products);
 		}
 	}
 }

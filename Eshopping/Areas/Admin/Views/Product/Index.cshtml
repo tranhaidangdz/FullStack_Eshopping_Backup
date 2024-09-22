@@ -39,7 +39,7 @@
 
 				@* Phương thức Html.Raw() sẽ render thô nội dung HTML thay vì escape các ký tự đặc biệt *@
 				<td>@Html.Raw(@item.Description)</td>
-				<td>@item.Price</td>
+				<td>@item.Price.ToString("#,##0 VNĐ")</td>
 
 				<td><img src="@Url.Content("~/media/products/" + item.Image)" alt="Product Image" width="120" /></td>
 				@* đường dẫn ~/ trong ASP.NET Core chỉ được xử lý đúng khi sử dụng Url.Content() *@

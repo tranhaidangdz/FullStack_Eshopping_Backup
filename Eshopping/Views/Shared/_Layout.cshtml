@@ -151,9 +151,12 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.14.0/dist/sweetalert2.min.css
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<div class="search_box pull-right">
-							<input type="text" placeholder="Search" />
-						</div>
+						<form asp-controller="Product" asp-action="Search" method="post">
+							<div class="search_box pull-right">
+								<input type="text" placeholder="Search" name="searchTerm"/>
+								<button class="btn btn-warning" type="submit">Search</button>
+							</div>
+						</form>
 					</div>
 				</div>
 			</div>

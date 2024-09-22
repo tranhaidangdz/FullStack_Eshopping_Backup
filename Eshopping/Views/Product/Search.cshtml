@@ -1,5 +1,8 @@
 ﻿@model IEnumerable<ProductModel>
-
+@{
+	ViewData["Title"]=@ViewBag.Keyword;
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
 <div class="col-sm-3">
 	@Html.Partial("_SidebarPartial")
 </div>
@@ -7,12 +10,10 @@
 	.product-image-wrapper{
 		height:450px;
 	}
-</style>
-
 <div class="col-sm-9 padding-right">
 	<div class="features_items">
 		<!--features_items-->
-		<h2 class="title text-center">Features Items</h2>
+		<h2 class="title text-center">@ViewBag.Keyword</h2>
 		@foreach (var item in Model)
 		{
 			<div class="col-sm-4">
@@ -21,23 +22,15 @@
 						<div class="productinfo text-center">
 
 							<img src="~/media/products/@item.Image" alt="@item.Name" width="100%" />
-							<h2>$@item.Price.ToString("#,##0 VNĐ")</h2>
-							<p>Tên sản phẩm : @item.Name</p>
+							<h2>$@item.Price</h2>
+
+							<p> @item.Name </p>
+
 							<p>Danh mục : @item.Category.Name</p>
 							<p>Thương hiệu : @item.Brand.Name</p>
 							<a  class="btn btn-default add-to-cart" asp-action="Add" asp-controller="Cart" asp-route-Id="@item.Id">
 								<i class="fa fa-shopping-cart" ></i>Add to cart
 							</a>
-						</div>
-						@* đoạn code này để khi hover sp nó sẽ hiện 1 lớp đè lên lớp cũ, ta chỉnh nút add to cart giống với nút ở trên => nó cũng có thể add vào giỏ hàng  *@
-						<div class="product-overlay">
-							<div class="overlay-content">
-								<h2>$@item.Price.ToString("#,##0 VNĐ")</h2>
-								<p>@item.Name</p>
-								<a class="btn btn-default add-to-cart" asp-action="Add" asp-controller="Cart" asp-route-Id="@item.Id">
-									<i class="fa fa-shopping-cart"></i>Add to cart
-								</a>
-							</div>
 						</div>
 					</div>
 					<div class="choose">
@@ -48,7 +41,29 @@
 					</div>
 				</div>
 			</div>
+			<div class="col-sm-4">
+				<div class="product-image-wrapper">
+					<div class="single-products">
+						<div class="productinfo text-center">
 
+							<img src="~/images/home/@item.Image" alt="@item.Name" width="100%" />
+							<h2>$@item.Price</h2>
+							<p>@item.Name </p>
+							<p>Danh mục : @item.Category.Name</p>
+							<p>Thương hiệu : @item.Brand.Name</p>
+							<a href="#" class="btn btn-default add-to-cart">
+								<i class="fa fa-shopping-cart"></i>Add to cart
+							</a>
+						</div>
+					</div>
+					<div class="choose">
+						<ul class="nav nav-pills nav-justified">
+							<li><a href="#"><i class="fa fa-plus-square"></i>Add to wishlist</a></li>
+							<li><a href="#"><i class="fa fa-plus-square"></i>Add to compare</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
 			
 		
 		}
