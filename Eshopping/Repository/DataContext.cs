@@ -9,8 +9,10 @@ namespace Eshopping.Repository
         public DataContext(DbContextOptions<DataContext>options):base(options) 
         {
         }
+        //để tạo csdl ta sẽ thêm các phương thức dataset, lấy thuộc tính từ model, sau đó chạy add-migration trong nugnet packet console là tạo đc csdl  
         public DbSet<BrandModel> Brands { get; set; }
         public DbSet<ProductModel> Products { get; set; }
+        public DbSet<RatingModel> Ratings { get; set; }
         public DbSet<CategoryModel> Categories { get; set; }
         public DbSet<OrderModel> Orders { get; set; }
 		public DbSet<OrderDetails> OrderDetails { get; set; }
