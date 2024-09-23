@@ -51,7 +51,7 @@ namespace Eshopping.Controllers
 
 		//Vì vậy, bạn nên giữ đoạn code xử lý comment này trong file ProductController dành cho người dùng thông thường, không phải trong phần dành cho admin.
 		
-				[HttpPost]
+		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> CommentProduct(RatingModel rating)
 		{
@@ -77,7 +77,7 @@ namespace Eshopping.Controllers
 			}
 			else
 			{
-				TempData["error"] = "Model có 1 vài thứ đang bị lỗi";
+				TempData["error"] = "Hình như bạn chưa nhập tên, email và phần đánh giá của bạn";
 				List<string> errors = new List<string>();
 				foreach (var value in ModelState.Values)
 				{
