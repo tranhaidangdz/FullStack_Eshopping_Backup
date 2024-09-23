@@ -53,6 +53,13 @@
 	*@
 @section Scripts {
     <script>
-        let table = new DataTable('#myTable');  //nó gọi đến id của thẻ table ở trên =>> render ra thông tin theo dạng bảng này để tìm
+        //nó gọi đến id của thẻ table ở trên =>> render ra thông tin theo dạng bảng này để tìm
+        let table = new DataTable('#myTable', {
+            layout: {
+                topStart: {
+                    buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+                }
+            }
+        });
     </script>
 }

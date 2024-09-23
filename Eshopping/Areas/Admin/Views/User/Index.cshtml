@@ -5,7 +5,7 @@
 <h4>List User </h4>
 @* thêm sửa xóa sp: *@
 <a class="btn btn-warning btn-sm" asp-action="Create" asp-controller="User">Add User</a>
-<table class="table">
+<table class="table" id="myTable">
     <thead>
         <tr>
             <th scope="col">STT</th>
@@ -47,3 +47,15 @@
         }
     </tbody>
 </table>
+@section Scripts {
+    <script>
+        //nó gọi đến id của thẻ table ở trên =>> render ra thông tin theo dạng bảng này để tìm
+        let table = new DataTable('#myTable', {
+            layout: {
+                topStart: {
+                    buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+                }
+            }
+        });
+    </script>
+}

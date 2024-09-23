@@ -59,9 +59,16 @@
 	@* database JS: tìm kiếm dữ liệu từ bảng có id="mytable" ở trên
 	-VD ta có thể nhập tên, id, mã sp ... miến có thông tin nào khớp nó sẽ hiển thị ra sp đó
 	*@
-	@section Scripts {
-		<script>
-			let table = new DataTable('#myTable');  //nó gọi đến id của thẻ table ở trên =>> render ra thông tin theo dạng bảng này để tìm
-		</script>
-	}
+@section Scripts {
+	<script>
+		//nó gọi đến id của thẻ table ở trên =>> render ra thông tin theo dạng bảng này để tìm
+		let table = new DataTable('#myTable', {
+			layout: {
+				topStart: {
+					buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+				}
+			}
+		});
+	</script>
+}
 <partial name="_paging" model="@pager"></partial>
