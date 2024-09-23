@@ -6,8 +6,8 @@
 
 }
 
-<h4>List Order </h4>
-<table class="table">
+<h4> Order Details</h4>
+<table class="table" id="detail_order">
     <thead>
         <tr>
             <th scope="col">id</th>
@@ -33,16 +33,20 @@
                 <td>@item.OrderCode</td>
                 <td>@item.UserName</td>
                 <td>@item.Product.Name</td>
-                <td>$ @item.Price</td>
+                <td> @item.Price.ToString("#,##0 VNĐ")</td>
                 <td>@item.Quantity</td>
-                <td>$@subtotal.ToString("")</td>
+                <td>@subtotal.ToString("#,##0 VNĐ")</td>
 
             </tr>
 
         }
         <tr>
-            <th colspan="5">Total:</th>
-            <td>$@total.ToString()</td>
+            <th >Total:</th>
+            <th></th>
+            <th ></th>
+            <th></th>
+            <th></th>
+            <td>@total.ToString("#,##0 VNĐ")</td>
             <td>
                 <select class="form-control select-update-order">
     <option value="1">Đơn hàng mới</option>
@@ -55,6 +59,18 @@
 
 @* đoạn code ajax: *@
 @section Scripts{
+    @* đoạn code này để in ra chi tiết đơn hàng, phục vụ cho ra đơn sau này  *@
+	<script>
+		//nó gọi đến id của thẻ table ở trên =>> render ra thông tin theo dạng bảng này để tìm
+        let table= new DataTable('#detail_order', {
+            layout: {
+                topStart: {
+                    buttons: ['pdf', 'print']
+                }
+            }
+        });
+	</script>
+
 <script>
     $(document).ready(function () {  //ta có 1 hàm
         $('.select-update-order').change(function () {  //nó sẽ thay đổi class trong thẻ select ở trên để chuyển trạng thái 0,,1 giữa các sp(0 là chưa đc cập nhật còn 1 là đã cập nhật )
@@ -80,4 +96,5 @@
         });
         });
  </script>
+
 }
