@@ -113,6 +113,7 @@ namespace Eshopping.Areas.Admin.Controllers
             }
             return View(product);
         }
+        [Route("Edit")]
         public async Task<IActionResult> Edit(int Id)
         {
             ProductModel product = await _dataContext.Products.FindAsync(Id);

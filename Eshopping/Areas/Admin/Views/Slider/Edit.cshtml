@@ -1,0 +1,82 @@
+﻿@model SliderModel
+@{
+    ViewData["title"] = "Edit Slider";
+}
+<h4>Edit Slider</h4>
+
+@* form them sp: để mở trang này : ta vào đg dẫn https://localhost:7135/admin, sau đó bấm add product để chuyển sang trang thêm sp *@
+<div class="col-md-9">
+    <form asp-action="Edit" asp-controller="Slider" enctype="multipart/form-data">
+        <input type="hidden" asp-for="@Model.Id"/>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        
+        <div class="form-group">
+            <label>Name</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label>Description</label>
+            <textarea asp-for="Description" class="form-control"> </textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label>Status</label>
+            <select asp-for="Status" class="form-control">
+                @if (Model.Status == 1)
+                {
+                    <option value="1" selected>Hiển thị</option>
+                    <option value="0">Ẩn</option>
+                }else
+                {
+                    <option value="1">Hiển thị</option>
+                    <option value="0" selected>Ẩn</option>
+                    
+                }
+            </select>
+
+        </div>
+        @* them hinh anh: *@
+        <div class="form-group">
+            <label>Image</label>
+            <input asp-for="ImageUpload" class="form-control" />
+            <span asp-validation-for="Image" class="text-danger"></span>
+            <img src="~/media/sliders/@Model.Image" width="400px" height="200px" />
+            <img id="imgpreview" class="pt-2" />
+        </div>
+        <div class="form-group">
+            <button class=" btn btn-primary">Update</button>
+        </div>
+    </form>
+    <a asp-action="Index">Back to List Slider</a>
+</div>
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    @* ta se cài ckEDITOR4 để có thể chỉnh sửa cỡ chữ, kiểu chữ trong phần description(mô tả).
+    giống như ta nhúng word vào trang web vậy, ng dùng có thể trang trí chữ trong phần description
+Lưu ý cái này chỉ AD cho texarea thôi  *@
+
+    <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+
+    <script>
+
+        // khi ta chọn 1 hình ảnh mới nào đó để upload lên sp mới=>hàm readURL  nó sẽ cho ta thấy các file ảnh ta định chọn
+        //  (tức là hiển thị hình ảnh mới đó lên trang web luôn để ta nhìn thấy ảnh đó )
+        //LƯU Ý: TA ĐANG VIẾT CHO TRANG CREATE PRODUCT, TỨC LÀ KHI ADD 1 ẢNH SP MƠI,NÓ SẼ CHO TA XEM TRC BỨC ẢNH ĐÓ
+
+        $("#ImageUpload").change(function()
+        {
+            readURL(this);
+        }
+        )
+    </script>
+
+    <script>
+        CKEDITOR.replace('Description');
+    </script>
+}
