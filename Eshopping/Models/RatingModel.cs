@@ -8,6 +8,7 @@ namespace Eshopping.Models
         [Key]
         public int Id { get; set; }
         public int ProductId {  get; set; }
+
         [Required(ErrorMessage ="Yêu cầu nhập đánh giá sản phẩm")]
         public string Comment { get; set; }
 
@@ -15,7 +16,8 @@ namespace Eshopping.Models
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Yêu cầu nhập email")]
-        public string Email { get; set; }
+		[EmailAddress(ErrorMessage = "Địa chỉ email không hợp lệ")]
+		public string Email { get; set; }
 
         public string Star { get; set; }
         [ForeignKey("ProductId")]

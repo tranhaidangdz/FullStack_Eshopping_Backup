@@ -1,5 +1,8 @@
 ﻿@model ProductDetailsViewModel
-
+@{
+	ViewData["Title"]="Details";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
 <div class="row">
 	<div class="col-sm-3">
 		@Html.Partial("_SidebarPartial")
@@ -200,20 +203,24 @@
 						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
 						<p><b>Write Your Review</b></p>
 
-						<form autocomplete="off" asp-action="CommentProduct" asp-controller="Product">
+						<form autocomplete="off" asp-action="CommentProduct" asp-controller="Product" method="post">
 							<span>
-								<input type="hidden" asp-for="@Model.RatingDetails.ProductId"/>
-								<input asp-for="@Model.RatingDetails.Name" type="text" placeholder="Your Name" />
-								<span asp-validation-for="@Model.RatingDetails.Name" class="text-danger"></span>
+								<input type="hidden" asp-for="@Model.ProductDetails.Id" name="ProductId"/>
+								<input type="hidden" name="Star" value="5"/>
 
-								<input asp-for="@Model.RatingDetails.Email" type="email" placeholder="Email Address" />
-								<span asp-validation-for="@Model.RatingDetails.Email" class="text-danger"></span>
+								<input asp-for="@Model.Name" type="text" placeholder="Your Name" />
+								<span asp-validation-for="@Model.Name" class="text-danger"></span>
+
+								<input asp-for="@Model.Email" type="email" placeholder="Email Address" />
+								<span asp-validation-for="@Model.Email" class="text-danger"></span>
 
 							</span>
-							<textarea asp-for="@Model.RatingDetails.Comment" name=""></textarea>
-							<span asp-validation-for="@Model.RatingDetails.Comment" class="text-danger"></span>
+
+							<textarea asp-for="@Model.Comment"></textarea>
+							<span asp-validation-for="@Model.Comment" class="text-danger"></span>
+
 							<b>Rating: </b> <img src="images/product-details/rating.png" alt="" />
-							<button type="button" class="btn btn-default pull-right">
+							<button type="submit" class="btn btn-default pull-right">
 								Submit
 							</button>
 						</form>
