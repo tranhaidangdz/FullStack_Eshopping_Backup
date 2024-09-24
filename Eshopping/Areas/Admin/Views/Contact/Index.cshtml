@@ -1,0 +1,70 @@
+﻿@model IEnumerable<ContactModel>
+@{
+	ViewData["title"] = "Contact Infor";
+	Paginate pager = new Paginate();
+
+	int pageNo = 0; // So tran dau tien = 0
+
+	if (ViewBag.Pager != null) // Đang co trang
+	{
+		pager = ViewBag.Pager;
+
+		pageNo = pager.CurrentPage;
+	}
+}
+
+<h4>List Contact</h4>
+<table class="table" id="myTable">
+	<thead>
+		<tr>
+			<th scope="col">STT</th>
+			<th scope="col">Name</th>
+			<th scope="col">Description</th>
+			<th scope="col">Map</th>
+			<th scope="col">Email</th>
+			<th scope="col">Logo</th>
+			<th scope="col">Phone</th>
+			
+			<th scope="col">Action</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td></td>
+				@* hiển thị sp từ csdl dưới dạng 1 bảng: sau này khi chèn thêm các sp vào csdl nó sẽ in ra thông  tin ở đây  *@
+				<td>@item.Name</td>
+
+				@* Phương thức Html.Raw() sẽ render thô nội dung HTML thay vì escape các ký tự đặc biệt *@
+				<td>@Html.Raw(@item.Description)</td>
+				<td>@Html.Raw(@item.Map)</td>
+				<td>@item.Email</td>
+				<td><img src="@Url.Content("~/media/logo/" + @item.LogoImg)" alt="Product Image" width="120" /></td>
+				@* đường dẫn ~/ trong ASP.NET Core chỉ được xử lý đúng khi sử dụng Url.Content() *@
+				<td>@item.Phone</td>
+				<td>
+					@* chỉnh sửa or xóa sp trong admin nó sẽ dựa vào id của sp đó, từ id đó trả  về thông tin sp *@
+					<a asp-action="Edit" class="btn btn-warning btn-sm" asp-controller="Contact">Edit</a>
+				</td>
+			</tr>
+
+		}
+	</tbody>
+</table>
+@* database JS: tìm kiếm dữ liệu từ bảng có id="mytable" ở trên
+	-VD ta có thể nhập tên, id, mã sp ... miến có thông tin nào khớp nó sẽ hiển thị ra sp đó
+	*@
+@section Scripts {
+	<script>
+		//nó gọi đến id của thẻ table ở trên =>> render ra thông tin theo dạng bảng này để tìm
+		let table = new DataTable('#myTable', {
+			layout: {
+				topStart: {
+					buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+				}
+			}
+		});
+	</script>
+}
+<partial name="_paging" model="@pager"></partial>
