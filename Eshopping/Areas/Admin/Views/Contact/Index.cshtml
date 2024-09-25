@@ -42,7 +42,7 @@
 				<td>@item.Email</td>
 				<td><img src="@Url.Content("~/media/logo/" + @item.LogoImg)" alt="Product Image" width="120" /></td>
 				@* đường dẫn ~/ trong ASP.NET Core chỉ được xử lý đúng khi sử dụng Url.Content() *@
-				<td>@item.Phone</td>
+				<td>@Html.Raw(@item.Phone)</td>
 				<td>
 					@* chỉnh sửa or xóa sp trong admin nó sẽ dựa vào id của sp đó, từ id đó trả  về thông tin sp *@
 					<a asp-action="Edit" class="btn btn-warning btn-sm" asp-controller="Contact">Edit</a>
