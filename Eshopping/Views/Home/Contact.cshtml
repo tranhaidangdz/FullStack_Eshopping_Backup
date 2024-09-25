@@ -1,4 +1,30 @@
 ﻿
-
+@model ContactModel
 
 <h2>Thông tin liên hệ shop làm web bán hàng đáng yêu.</h2>
+<div class="row">
+    <div class="col-sm-5 col-md-5">
+        @Html.Raw(@Model.Map)
+        @Html.Raw(@Model.Description)
+        
+    </div>
+    <div class="col-sm-4">
+        <div class="address">
+            <h5>Name: @Model.Name</h5>
+            <h5>Email: @Model.Email</h5>
+            <h5>Phone: @Model.Phone</h5>
+        </div>
+        @* vào trang https://developers.facebook.com/docs/plugins/page-plugin/ để đọc hướng dẫn cách tạo 1 fanpage và nhúng vào trang web  *@
+    </div>
+    <div class="col-sm-4">
+    <div class="fb-page"
+    data-href="https://www.facebook.com/profile.php?id=100022545212781" 
+    data-tabs="timeline" 
+    data-width="100%"
+    data-height=""
+    data-small-header="false"
+    data-adapt-container-width="true" 
+    data-hide-cover="false" 
+    data-show-facepile="true"></div>
+    </div>
+</div>
