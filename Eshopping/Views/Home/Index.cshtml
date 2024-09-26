@@ -11,6 +11,23 @@
 	.product-image-wrapper{
 		height:450px;
 	}
+
+	 .choose .nav.nav-pills.nav-justified li{
+  margin-top:17px;
+
+	 }
+
+		.choose .nav.nav-pills.nav-justified li .add-btn-wishlish {
+			margin:15px;
+			border-radius: 5px;
+			margin-top: 8px;
+		}	
+		.choose .nav.nav-pills.nav-justified li .add-btn-compare {
+		
+			margin:15px;
+			border-radius: 5px;
+			margin-top: 8px;
+		}
 </style>
 <div class="col-sm-9 padding-right">
 	<div class="features_items">
@@ -52,10 +69,13 @@
 						
 					</div>
 					<div class="choose">
-						<ul class="nav nav-pills nav-justified">
-							<li><a href="#"><i class="fa fa-plus-square"></i>Add to wishlist</a></li>
-							<li><a href="#"><i class="fa fa-plus-square"></i>Add to compare</a></li>
-						</ul>
+						@if (User.Identity?.IsAuthenticated ?? false)  //ta ktra nếu user đăng nhập mới cho bấm wishlish và compare
+						{
+							<ul class="nav nav-pills nav-justified">
+								<li><button class="btn btn-danger add-btn-wishlish" data-product_id="@item.Id"><i class="fa fa-plus-square "></i>Yêu thích</button></li>
+								<li><button class="btn btn-primary add-btn-compare" data-product_id="@item.Id"><i class="fa fa-plus-square "></i>So sánh</button></li>
+							</ul>
+						}
 					</div>
 				</div>
 			</div>
@@ -521,6 +541,46 @@
 					// Handle successful update
 					if (result) {
 						Swal.fire("Thêm giỏ hàng thành công!");
+					}
+				}
+			});
+		});
+	});
+</script>
+@* thêm sản phẩm yêu thích :add to wishlish *@
+<script>
+	$(document).ready(function () {
+		$('.add-btn-wishlish').click(function () {  //khi ta bấm nút thêm sp
+			var Id = $(this).data("product_id");  //nó sẽ lấy id sp đó 
+			//alert(product_id);
+			$.ajax({
+				type: "POST",
+				url: "@Url.Action("AddWishlist", "Home")",  //từ id đó gửi đến hàm add trong CartController 
+				data: { Id: Id }, // Send data to the server
+				success: function (result) {
+					// Handle successful update
+					if (result) {
+						Swal.fire("Thêm sản phẩm yêu thích thành công!");
+					}
+				}
+			});
+		});
+	});
+</script>
+@* thêm sản phẩm so sánh  :add to compare *@
+<script>
+	$(document).ready(function () {
+		$('.add-btn-compare').click(function () {  //khi ta bấm nút thêm sp
+			var Id = $(this).data("product_id");  //nó sẽ lấy id sp đó 
+			//alert(product_id);
+			$.ajax({
+				type: "POST",
+				url: "@Url.Action("AddCompare", "Home")",  //từ id đó gửi đến hàm add trong CartController 
+				data: { Id: Id }, // Send data to the server
+				success: function (result) {
+					// Handle successful update
+					if (result) {
+						Swal.fire("Thêm sản phẩm so sánh thành công!");
 					}
 				}
 			});
