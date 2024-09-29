@@ -29,6 +29,54 @@ namespace Eshopping.Controllers
             return View(products);
         }
 
+        public async Task<IActionResult> Compare()
+        {
+            var compare_product = await (from c in _dataContext.Compares
+                                         join p in _dataContext.Products on c.ProductId equals p.Id
+                                         //join u in _dataContext.Users on c.UserId equals Convert.ToInt32(u.Id)
+                                         select new { Product = p, Compares = c})
+                                .ToListAsync();
+            return View(compare_product);
+        }
+
+        public async Task<IActionResult> DeleteCompare(int Id)
+        {
+            //Tìm bản ghi theo id
+            CompareModel compare = await _dataContext.Compares.FindAsync(Id);
+            
+            //Xóa bản ghi và lưu thay đổi
+            _dataContext.Compares.Remove(compare);
+            await _dataContext.SaveChangesAsync();
+
+            //Đặt thông báo thành công và chuyển hướng
+            TempData["success"] = "So sánh đã được xóa thành công";
+            return View("Compare", "Home");
+        }
+
+        public async Task<IActionResult> DeleteWishlist(int Id)
+        {
+            //Tìm bản ghi theo id
+            WishlistModel wishlist = await _dataContext.Wishlishs.FindAsync(Id);
+
+            //Xóa bản ghi và lưu thay đổi
+            _dataContext.Wishlishs.Remove(wishlist);
+            await _dataContext.SaveChangesAsync();
+
+            //Đặt thông báo thành công và chuyển hướng
+            TempData["success"] = "Yêu thích đã được xóa thành công";
+            return View("Wishlist", "Home");
+        }
+        public async Task<IActionResult> Wishlist()
+        {
+            var wishlist_product = await (from c in _dataContext.Compares
+                                         join p in _dataContext.Products on c.ProductId equals p.Id
+                                         //join u in _dataContext.Users on c.UserId equals Convert.ToInt32(u.Id)
+                                         select new {  Product = p, Compares = c })
+                                .ToListAsync();
+            return View(wishlist_product);
+        }
+
+        
         public IActionResult Privacy()
         {
             return View();
@@ -60,7 +108,7 @@ namespace Eshopping.Controllers
 
         //THÊM SP YÊU THÍCH:
         [HttpPost]
-        public async Task<IActionResult> AddWishlish(int Id, WishlishModel wishlish)
+        public async Task<IActionResult> AddWishlish(int Id, WishlistModel wishlish)
         {
             var user=await _userManager.GetUserAsync(User);
             wishlish.ProductId = Id;

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Eshopping.Models
 {
-    public class WishlishModel
+    public class WishlistModel
     {
         [Key]
         public int Id { get; set; }
