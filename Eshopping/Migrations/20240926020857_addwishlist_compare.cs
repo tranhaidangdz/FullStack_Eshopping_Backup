@@ -5,7 +5,7 @@
 namespace Eshopping.Migrations
 {
     /// <inheritdoc />
-    public partial class addwishlish_compare : Migration
+    public partial class addwishlist_compare : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,7 +17,7 @@ namespace Eshopping.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProductId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -31,19 +31,19 @@ namespace Eshopping.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Wishlishs",
+                name: "Wishlists",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProductId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Wishlishs", x => x.Id);
+                    table.PrimaryKey("PK_Wishlists", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Wishlishs_Products_ProductId",
+                        name: "FK_Wishlists_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
@@ -56,8 +56,8 @@ namespace Eshopping.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Wishlishs_ProductId",
-                table: "Wishlishs",
+                name: "IX_Wishlists_ProductId",
+                table: "Wishlists",
                 column: "ProductId");
         }
 
@@ -68,7 +68,8 @@ namespace Eshopping.Migrations
                 name: "Compares");
 
             migrationBuilder.DropTable(
-                name: "Wishlishs");
+                name: "Wishlists");
         }
     }
 }
+

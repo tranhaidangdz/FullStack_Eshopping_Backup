@@ -33,8 +33,8 @@ namespace Eshopping.Controllers
         {
             var compare_product = await (from c in _dataContext.Compares
                                          join p in _dataContext.Products on c.ProductId equals p.Id
-                                         //join u in _dataContext.Users on c.UserId equals Convert.ToInt32(u.Id)
-                                         select new { Product = p, Compares = c})
+                                         join u in _dataContext.Users on c.UserId equals u.Id
+                                         select new { User = u, Product = p, Compares = c})
                                 .ToListAsync();
             return View(compare_product);
         }
@@ -56,10 +56,10 @@ namespace Eshopping.Controllers
         public async Task<IActionResult> DeleteWishlist(int Id)
         {
             //Tìm bản ghi theo id
-            WishlistModel wishlist = await _dataContext.Wishlishs.FindAsync(Id);
+            WishlistModel wishlist = await _dataContext.Wishlists.FindAsync(Id);
 
             //Xóa bản ghi và lưu thay đổi
-            _dataContext.Wishlishs.Remove(wishlist);
+            _dataContext.Wishlists.Remove(wishlist);
             await _dataContext.SaveChangesAsync();
 
             //Đặt thông báo thành công và chuyển hướng
@@ -68,15 +68,15 @@ namespace Eshopping.Controllers
         }
         public async Task<IActionResult> Wishlist()
         {
-            var wishlist_product = await (from c in _dataContext.Compares
-                                         join p in _dataContext.Products on c.ProductId equals p.Id
-                                         //join u in _dataContext.Users on c.UserId equals Convert.ToInt32(u.Id)
-                                         select new {  Product = p, Compares = c })
+            var wishlist_product = await (from w in _dataContext.Wishlists
+                                          join p in _dataContext.Products on w.ProductId equals p.Id
+                                          join u in _dataContext.Users on w.UserId equals u.Id
+                                          select new { Product = p, Wishlist = w })
                                 .ToListAsync();
             return View(wishlist_product);
         }
 
-        
+
         public IActionResult Privacy()
         {
             return View();
@@ -108,12 +108,21 @@ namespace Eshopping.Controllers
 
         //THÊM SP YÊU THÍCH:
         [HttpPost]
-        public async Task<IActionResult> AddWishlish(int Id, WishlistModel wishlish)
+        [ValidateAntiForgeryToken]
+
+        public async Task<IActionResult> AddWishlist(int Id, WishlistModel wishlist)
         {
-            var user=await _userManager.GetUserAsync(User);
-            wishlish.ProductId = Id;
-			wishlish.UserId = Convert.ToInt32(user.Id);
-			_dataContext.Add(wishlish);
+            var user = await _userManager.GetUserAsync(User);
+            var product = await _dataContext.Products.FindAsync(Id);
+            if (product == null)
+            {
+                return NotFound("Sản phẩm không tồn tại.");
+            }
+
+
+            wishlist.ProductId = Id;
+			wishlist.UserId = user.Id;
+			_dataContext.Add(wishlist);
             try
             {
                 await _dataContext.SaveChangesAsync();
@@ -126,13 +135,22 @@ namespace Eshopping.Controllers
         }  
         //THÊM SP SO SÁNH:
         [HttpPost]
+        [ValidateAntiForgeryToken]
+
         public async Task<IActionResult> AddWCompare(int Id)
         {
-            var user=await _userManager.GetUserAsync(User);
+            var user = await _userManager.GetUserAsync(User);
+            var product = await _dataContext.Products.FindAsync(Id);
+            if (product == null)
+            {
+                return NotFound("Sản phẩm không tồn tại.");
+            }
+
+
             var compareProduct = new CompareModel
             {
                 ProductId=Id,
-                UserId=Convert.ToInt32(user.Id)
+                UserId=user.Id
             };
 			_dataContext.Compares.Add(compareProduct);
             try
