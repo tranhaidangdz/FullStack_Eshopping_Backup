@@ -108,9 +108,8 @@ namespace Eshopping.Controllers
 
         //THÊM SP YÊU THÍCH:
         [HttpPost]
-        [ValidateAntiForgeryToken]
 
-        public async Task<IActionResult> AddWishlist(int Id, WishlistModel wishlist)
+        public async Task<IActionResult> AddWishlist(int Id)
         {
             var user = await _userManager.GetUserAsync(User);
             var product = await _dataContext.Products.FindAsync(Id);
@@ -119,14 +118,17 @@ namespace Eshopping.Controllers
                 return NotFound("Sản phẩm không tồn tại.");
             }
 
+            var wishlistProduct = new WishlistModel
+            {
+                ProductId = Id,
+                UserId = user.Id
+            };
+			_dataContext.Wishlists.Add(wishlistProduct);
 
-            wishlist.ProductId = Id;
-			wishlist.UserId = user.Id;
-			_dataContext.Add(wishlist);
-            try
+			try
             {
                 await _dataContext.SaveChangesAsync();
-                return Ok(new { success = true, message = "Thêm sản phẩm yêu thích thành công !" });
+                return Ok(new { success = true, message = "Đã thêm sản phẩm yêu thích !" });
             }
             catch(Exception)
             {
@@ -135,11 +137,11 @@ namespace Eshopping.Controllers
         }  
         //THÊM SP SO SÁNH:
         [HttpPost]
-        [ValidateAntiForgeryToken]
 
-        public async Task<IActionResult> AddWCompare(int Id)
+        public async Task<IActionResult> AddCompare(int Id)
         {
             var user = await _userManager.GetUserAsync(User);
+
             var product = await _dataContext.Products.FindAsync(Id);
             if (product == null)
             {
@@ -156,7 +158,7 @@ namespace Eshopping.Controllers
             try
             {
                 await _dataContext.SaveChangesAsync();
-                return Ok(new { success = true, message = "Thêm sản phẩm so sánh thành công !" });
+                return Ok(new { success = true, message = "Đã thêm sản phẩm so sánh !" });
             }
             catch(Exception)
             {
