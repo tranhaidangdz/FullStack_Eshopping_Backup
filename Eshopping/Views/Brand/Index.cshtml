@@ -22,6 +22,20 @@
 							<h2>@item.Price.ToString("#,##0 VNĐ")</h2>
 							<p>Danh mục : @item.Category.Name</p>
 							<p>Thương hiệu : @item.Brand.Name</p>
+							@if (item.Quantity > 0)
+							{
+								<a class="btn btn-default add-to-cart" asp-action="Add" asp-controller="Cart" asp-route-Id="@item.Id">
+									<i class="fa fa-shopping-cart"></i>Add to cart
+								</a>
+							}
+							else
+							{
+								<button type="button" class="btn btn-fefault">
+									<i class="fa fa-shopping-cart"></i>
+									Hết hàng
+								</button>
+							}
+
 							<a  class="btn btn-default add-to-cart" asp-action="Add" asp-controller="Cart" asp-route-Id="@item.Id">
 								<i class="fa fa-shopping-cart" ></i>Add to cart
 							</a>

@@ -2,6 +2,7 @@
 using Eshopping.Models.ViewModels;
 using Eshopping.Repository;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Eshopping.Controllers
 {
@@ -75,21 +76,25 @@ namespace Eshopping.Controllers
 
 			}
 			TempData["success"] = "Decrease Item quantity to cart Successfully!";
-            return RedirectToAction("Index");
+			return RedirectToAction("Index");
 		}
 		//tuong tự khi ta nhấn asp-action="Increase":nút tăng sp 
 		public async Task<IActionResult> Increase(int Id)
 		{
+			ProductModel product = await _dataContext.Products.Where(p => p.Id == Id).FirstOrDefaultAsync();
 			List<CartItemModel> cart = HttpContext.Session.GetJson<List<CartItemModel>>("Cart") ?? new List<CartItemModel>();
 			CartItemModel cartItem = cart.Where(c => c.ProductId == Id).FirstOrDefault();
 
-			if (cartItem.Quantity >= 1)
+			// Kiểm tra số lượng sản phẩm còn lại, nếu đã đạt số lượng tối đa thì không cho tăng
+			if (cartItem.Quantity >= 1 && product.Quantity > cartItem.Quantity)
 			{
 				++cartItem.Quantity;  //nếu bấm vào nút có class decrease ta ktra số lg , nếu >1 thì tang  số lg sp đi 
+				TempData["success"] = "Tăng số lượng sản phẩm thành công";
 			}
 			else
 			{
-				cart.RemoveAll(p => p.ProductId == Id);
+				cartItem.Quantity = product.Quantity;
+				TempData["error"] = "Số lượng sản phẩm đã đạt tối đa";
 			}
 
 			if (cart.Count == 0)
@@ -101,8 +106,8 @@ namespace Eshopping.Controllers
 				HttpContext.Session.SetJson("Cart", cart);
 
 			}
-            TempData["success"] = "Increase Item quantity to cart Successfully!" ;
-            return RedirectToAction("Index");
+			TempData["success"] = "Increase Item quantity to cart Successfully!";
+			return RedirectToAction("Index");
 		}
 
 		//ham remove san pham:
@@ -119,8 +124,8 @@ namespace Eshopping.Controllers
 				HttpContext.Session.SetJson("Cart", cart);
 
 			}
-			TempData["success"] = "Remove Item of cart Successfully!" ;
-            return RedirectToAction("Index");
+			TempData["success"] = "Remove Item of cart Successfully!";
+			return RedirectToAction("Index");
 
 		}
 		//hàm xóa toàn bộ giỏ hàng:
@@ -128,8 +133,8 @@ namespace Eshopping.Controllers
 		{
 			HttpContext.Session.Remove("Cart");
 
-            TempData["success"] = "Clear all Item of cart Successfully!" ;
-            return RedirectToAction("Index");
+			TempData["success"] = "Clear all Item of cart Successfully!";
+			return RedirectToAction("Index");
 		}
 	}
 }

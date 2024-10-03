@@ -1,6 +1,8 @@
 ﻿@model ProductQuantityModel
 @{
     ViewData["title"] = "Create Quantity";
+    var total_quantities = 0;
+    var key = 0;
 }
 <h4>Create Quantity</h4>
 
@@ -22,6 +24,37 @@
             <button class=" btn btn-primary">Create</button>
         </div>
     </form>
+
+    <h3>Existing Product Quantities:</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Key</th>
+                <th>Quantity added</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var productQuantity in ViewBag.ProductByQuantity)
+            {
+                total_quantities += productQuantity.Quantity;
+
+                <tr>
+                    <td>@key</td>
+                    <td>@productQuantity.Quantity</td>
+                    <td>@productQuantity.DateCreated</td>
+                </tr>
+
+                key++;
+            }
+
+            <tr>
+                <td>Total Quantities: @total_quantities</td>
+            </tr>
+        </tbody>
+    </table>
+
+
     <a asp-controller="Product" asp-action="Index">Back to List Product</a>
 </div>
 @section Scripts

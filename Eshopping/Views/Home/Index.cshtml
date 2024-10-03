@@ -50,9 +50,19 @@
 							<p>Thương hiệu : @item.Brand.Name</p>
 							</a>
 
-							<button class="btn btn-default add-to-cart" data-product_id="@item.Id">
-								<i class="fa fa-shopping-cart" ></i>Thêm giỏ hàng 
-							</button>
+							@*het hang*@
+							@if(item.Quantity > 0) {
+								<button class="btn btn-default add-to-cart" data-product_id="@item.Id">
+									<i class="fa fa-shopping-cart"></i>Thêm giỏ hàng
+								</button>
+							}
+							else
+							{
+								<button class="btn btn-default ">
+									<i class="fa fa-shopping-cart"></i>Hết hàng
+								</button>
+							}
+								
 						</div>
 						
 @*  PHẦN HOVER ĐỂ HIỆN GIÁ TRÊN SẢN PHẨM :TA TẮT NÓ ĐI ĐỂ KHI BẤM VAO SP NÓ MỚI CHUYỂN TRANG PRODUCT ĐC 

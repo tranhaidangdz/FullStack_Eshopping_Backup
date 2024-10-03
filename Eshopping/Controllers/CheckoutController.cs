@@ -4,6 +4,7 @@ using Eshopping.Models.ViewModels;
 using Eshopping.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Security.Cryptography.Xml;
@@ -50,6 +51,12 @@ namespace Eshopping.Controllers
 					orderdetails.Price = cart.Price;
 					orderdetails.Quantity = cart.Quantity;
 
+					// Update product quantity
+					var product = await _dataContext.Products.Where(p => p.Id == cart.ProductId).FirstAsync();
+					product.Quantity -= cart.Quantity; // trừ đi số sản phẩm đã mua 
+					product.Sold += cart.Quantity; // cộng thêm sản phẩm đã bán
+					_dataContext.Update(product);
+					//
 					_dataContext.Add(orderdetails);
 					_dataContext.SaveChanges();
 				}
