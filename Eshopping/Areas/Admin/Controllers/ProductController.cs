@@ -19,6 +19,7 @@ namespace Eshopping.Areas.Admin.Controllers
             _dataContext = context;
             _webHostEnvironment = webHostEnvironment;
         }
+
         [HttpGet]
         public async Task<IActionResult> Index(int pg = 1)
         {
@@ -217,5 +218,42 @@ namespace Eshopping.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
+        // Add more quantity to products
+        [Route("AddQuantity")]
+        [HttpGet]
+        public async Task<IActionResult> AddQuantity(int Id)
+        {
+            ViewBag.Id = Id;
+            return View();
+        }
+
+        [Route("StoreProductQuantity")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult StoreProductQuantity(ProductQuantityModel productQuantityModel)
+        {
+            // Tim san pham dua vao product id
+            var product = _dataContext.Products.Find(productQuantityModel.ProductId);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            // Cộng dồn số lượng sản phẩm nếu tìm thấy
+            product.Quantity += productQuantityModel.Quantity;
+
+            productQuantityModel.Quantity = productQuantityModel.Quantity;
+            productQuantityModel.ProductId = productQuantityModel.ProductId;
+            productQuantityModel.DateCreated = DateTime.Now;
+
+            _dataContext.Add(productQuantityModel);
+            _dataContext.SaveChangesAsync();
+
+            TempData["success"] = "Thêm số lượng sản phẩm thành công";
+            return RedirectToAction("AddQuantity", "Product", new { Id = productQuantityModel.ProductId });
+
+
+        }
     }
 }

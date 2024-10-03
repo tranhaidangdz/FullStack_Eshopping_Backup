@@ -19,12 +19,18 @@ namespace Eshopping.Models
         [Range(0.01, double.MaxValue, ErrorMessage = "Giá sản phẩm phải lớn hơn 0")]
         [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
+
         public int BrandId { get; set; }
         public int CategoryId { get; set; }
+        public string Image { get; set; }
+        
+        public int Quantity { get; set; }
+
+        public int Sold { get; set; }
+
         public CategoryModel Category { get; set; }
         public BrandModel Brand { get; set; }
         public RatingModel Ratings { get; set; }
-        public string Image { get; set; }
         [NotMapped]
         [FileExtension]
         public IFormFile ImageUpload { get; set; }  
