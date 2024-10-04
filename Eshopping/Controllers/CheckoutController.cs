@@ -52,15 +52,24 @@ namespace Eshopping.Controllers
 					orderdetails.Quantity = cart.Quantity;
 
 					// Update product quantity
-					var product = await _dataContext.Products.Where(p => p.Id == cart.ProductId).FirstAsync();
+					//Kiểm tra giá trị của cart.ProductId trước khi thực hiện truy vấn để đảm bảo rằng sản phẩm tồn tại trong bảng Products.
+					//Thêm xử lý ngoại lệ khi không tìm thấy sản phẩm bằng cách sử dụng phương thức FirstOrDefaultAsync() thay vì FirstAsync().Phương thức này sẽ trả về null nếu không tìm thấy sản phẩm, và bạn có thể kiểm tra điều này để tránh lỗi:
+					var product = await _dataContext.Products.Where(p => p.Id == cart.ProductId).FirstOrDefaultAsync();
+					if (product == null)
+					{
+						TempData["error"] = "Sản phẩm không tồn tại trong hệ thống";
+						return RedirectToAction("Index", "Cart");
+					}
+
 					product.Quantity -= cart.Quantity; // trừ đi số sản phẩm đã mua 
 					product.Sold += cart.Quantity; // cộng thêm sản phẩm đã bán
 					_dataContext.Update(product);
 					//
 					_dataContext.Add(orderdetails);
-					_dataContext.SaveChanges();
 				}
-
+				// Lưu tất cả thay đổi
+				_dataContext.SaveChanges();
+				// Xóa giỏ hàng khỏi session sau khi đặt hàng thành công
 				HttpContext.Session.Remove("Cart");
 				//sau khi đặt hàng và bấm checkout , ta sẽ xóa đi đơn hàng đã đặt và gửi mail cho khách hàng bằng cái email trandang ở file Emailseder 
 				var receiver = userEmail;  //email nhận, nó đc gửi đi từ email trandang211, sau này ta sẽ thay email nhận này = email ng dùng nhập vào 
