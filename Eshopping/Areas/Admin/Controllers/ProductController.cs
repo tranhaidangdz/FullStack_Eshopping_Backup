@@ -114,11 +114,18 @@ namespace Eshopping.Areas.Admin.Controllers
             }
             return View(product);
         }
-        [Route("Edit")]
+        [HttpGet]
+
         public async Task<IActionResult> Edit(int Id)
         {
-            ProductModel product = await _dataContext.Products.FindAsync(Id);
-            ViewBag.Categories = new SelectList(_dataContext.Categories, "Id", "Name", product.CategoryId);
+			ProductModel product = await _dataContext.Products.FindAsync(Id);
+			if (product == null)
+			{
+				// Thêm thông báo lỗi hoặc xử lý khi không tìm thấy sản phẩm
+				return NotFound();
+			}
+
+			ViewBag.Categories = new SelectList(_dataContext.Categories, "Id", "Name", product.CategoryId);
             ViewBag.Brands = new SelectList(_dataContext.Brands, "Id", "Name", product.BrandId);
             return View(product);
         }
@@ -126,12 +133,18 @@ namespace Eshopping.Areas.Admin.Controllers
         //FORM edit:
         [HttpPost]
         [ValidateAntiForgeryToken]
+
         public async Task<IActionResult> Edit(ProductModel product)  //lấy ds và thương hiệu của form (nhận từ ng dùng ) sau đó so sánh với các sp đã có trong csdl 
         {
             ViewBag.Categories = new SelectList(_dataContext.Categories, "Id", "Name", product.CategoryId);
             ViewBag.Brands = new SelectList(_dataContext.Brands, "Id", "Name", product.BrandId);
-            var exitsted_product = _dataContext.Products.Find(product.Id); //tìm sp theo ID 
-            if (ModelState.IsValid)
+			var exitsted_product = _dataContext.Products.Find(product.Id); // sử dụng FindAsync:tìm sp theo ID 
+			if (exitsted_product == null)
+			{
+				TempData["error"] = "Sản phẩm không tồn tại.";
+				return RedirectToAction("Index");
+			}
+			if (ModelState.IsValid)
             {
                 //code them du lieu san pham:
                 //TempData["success"] = "Model ok hết rồi";
