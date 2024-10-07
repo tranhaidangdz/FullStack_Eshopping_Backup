@@ -5,7 +5,21 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 <h4>Giỏ hàng</h4>
+<style type="text/css">
+	.css_select_div {
+		text-align: center;
+	}
 
+	.css_select {
+		display: inline-table;
+		width: 500px;
+		padding: 5px;
+		margin: 5px 2%;
+		border: solid 1px #686868;
+		border-radius: 5px;
+	}
+
+</style>
 <section id="cart_items">
 	<div class="container">
 		<div class="breadcrumbs">
@@ -59,12 +73,55 @@
 								</td>
 							</tr>
 						}
-						<tr rowspan="5"> 
-							<td colspan="6">Grand Total:<p class="cart_total_price"> @Model.GrandTotal.ToString()</p> </td>
-							<td><a class="btn btn-danger btn-sm" asp-controller="Cart" asp-action="ClearCart"> Clear </a></td>
-							@if(User.Identity?.IsAuthenticated ?? false)
+						<tr>
+							<td rowspan="10">
+							Grand Total:<p class="cart_total_price"> @Model.GrandTotal.ToString("#,##0 VNĐ")</p>
+							Shipping Cost:<p class="cart_total_price"> @Model.ShippingCost.ToString("#,##0 VNĐ")</p>
+
+								<p>	<a asp-action="RemoveShippingCookie" asp-controller="Cart">Xóa Shipping</a> </p>
+							
+						</td>
+							<td rowspan="20">
+								<div class="form-group">
+									<label>Chọn</label>
+									<select class="css_select" id="tinh" name="tinh" title="Chọn Tỉnh Thành">
+										<option value="0">Tỉnh Thành</option>
+									</select>
+								</div>
+
+								<div class="form-group">
+									<label>Chọn</label>
+									<select class="css_select" id="quan" name="quan" title="Chọn Quận Huyện">
+										<option value="0">Quận Huyện</option>
+									</select>
+								</div>
+
+								<div class="form-group">
+									<label>Chọn</label>
+									<select class="css_select" id="phuong" name="phuong" title="Chọn Phường Xã">
+										<option value="0">Phường Xã</option>
+									</select>
+								</div>
+
+								<button type="button" class="btn btn-default btn-add-shipping">Tính phí ship</button>
+							</td>
+							
+							<td><a class="btn btn-danger btn-sm" asp-controller="Cart" asp-action="ClearCart"> clear </a></td>
+							@if(User.Identity?.IsAuthenticated ?? false)  //ktra nếu ng dùng đã đăng nhập thì mới đc đặt hàng 
 							{
-								<td><a class="btn btn-primary btn-sm" asp-controller="Checkout" asp-action="Checkout"> Checkout </a></td>
+								<td>
+									@if (Model.ShippingCost <= 0)
+									{
+										<a disable="disabled" class="btn btn-primary btn-sm" asp-controller="Checkout" asp-action="Checkout"> Đặt hàng </a> //nếu gía ship<=0 ta ko cho đặt hàng, ta dùng disable để ẩn nút đặt hàng đi ko cho ng dùng nhấn vào 
+										<br />
+										<span class="text text-danger">Hãy bấm tính phí vận chuyển trước khi đặt hàng</span>
+									}
+									else
+									{
+										<a class="btn btn-primary btn-sm" asp-controller="Checkout" asp-action="Checkout"> Đặt hàng </a>
+										
+									}
+								</td>
 							}
 							
 						</tr>
@@ -79,3 +136,74 @@
 		</div>
 	</div>
 </section> <!--/#cart_items-->
+
+@section Scripts
+{
+	<script>
+		//khi người dùng nhấn tạo để có thể lấy thông tin tỉnh thành phố và gửi ship:
+		$(".btn-add-shipping").click(function () {
+			//nó sẽ lấy tỉnh , thành phố, xã để trả về:
+			var tinh = $("#tinh").find('option:selected').text();
+			var quan = $("#quan").find('option:selected').text();
+			var phuong = $("#phuong").find('option:selected').text();
+
+			var price = $("#price-shipping").val();
+
+			if (tinh == '' || quan == '' || phuong == '' || price == '') {
+				Swal.fire("không được bỏ trống");
+			} else {
+				$.ajax({
+					type: "POST",
+					url: "@Url.Action("GetShipping", "Cart")",
+					data: { tinh: tinh, quan: quan, phuong: phuong, price: price },
+
+					success: function (result) {
+						//successful
+						if (result) 
+						
+							location.reload();  //sau khi gửi dữ liệu thì xóa tỉnh thành phố cũ vừa chọn
+
+					}
+				});
+			}
+		})  //ko đc bỏ ngoặc tròn thừa ở cuối này. RẤT QUAN TRỌNG, NẾU THIẾU NÓ LÀ AJAX KO CHẠY
+
+		$(document).ready(function () {
+			//Lấy tỉnh thành
+			$.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function (data_tinh) {
+				if (data_tinh.error == 0) {
+					$.each(data_tinh.data, function (key_tinh, val_tinh) {
+						$("#tinh").append('<option value="' + val_tinh.id + '">' + val_tinh.full_name + '</option>');
+					});
+					$("#tinh").change(function (e) {
+						var idtinh = $(this).val();
+						//Lấy quận huyện
+						$.getJSON('https://esgoo.net/api-tinhthanh/2/' + idtinh + '.htm', function (data_quan) {
+							if (data_quan.error == 0) {
+								$("#quan").html('<option value="0">Quận Huyện</option>');
+								$("#phuong").html('<option value="0">Phường Xã</option>');
+								$.each(data_quan.data, function (key_quan, val_quan) {
+									$("#quan").append('<option value="' + val_quan.id + '">' + val_quan.full_name + '</option>');
+								});
+								//Lấy phường xã
+								$("#quan").change(function (e) {
+									var idquan = $(this).val();
+									$.getJSON('https://esgoo.net/api-tinhthanh/3/' + idquan + '.htm', function (data_phuong) {
+										if (data_phuong.error == 0) {
+											$("#phuong").html('<option value="0">Phường Xã</option>');
+											$.each(data_phuong.data, function (key_phuong, val_phuong) {
+												$("#phuong").append('<option value="' + val_phuong.id + '">' + val_phuong.full_name + '</option>');
+											});
+										}
+									});
+								});
+
+							}
+						});
+					});
+
+				}
+			});
+		});
+	</script>
+}
