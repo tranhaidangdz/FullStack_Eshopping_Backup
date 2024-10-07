@@ -9,6 +9,7 @@
         <tr>
             <th scope="col">STT</th>
             <th scope="col">Order Code</th>
+            <th scope="col">Shipping Code</th>
             <th scope="col">Username</th>
             <th scope="col">Order Date</th>
             <th scope="col">Order Status</th>
@@ -23,6 +24,7 @@
                 <th scope="row">@item.Id</th>
                 @* hiển thị sp từ csdl dưới dạng 1 bảng: sau này khi chèn thêm các sp vào csdl nó sẽ in ra thông  tin ở đây  *@
                 <th scope="row">@item.OrderCode</th>
+                    <th scope="row">@item.ShippingCost.ToString("#,##0 VNĐ")</th>
                 <td>@item.UserName</td>
 
                 @* Phương thức Html.Raw() sẽ render thô nội dung HTML thay vì escape các ký tự đặc biệt *@

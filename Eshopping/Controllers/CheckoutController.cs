@@ -5,6 +5,7 @@ using Eshopping.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Security.Cryptography.Xml;
@@ -35,6 +36,18 @@ namespace Eshopping.Controllers
 				var ordercode = Guid.NewGuid().ToString(); // Dùng để random mã đơn hàng 
 				var orderItem = new OrderModel();
 				orderItem.OrderCode = ordercode;
+
+				//nhận shipping từ cookie (tức là ta vừa thêm giá ship vào cookie xong giờ lại lấy ra):
+				var shippingPriceCookie = Request.Cookies["ShippingPrice"];
+				decimal shippingPrice = 0;
+
+				if (shippingPriceCookie != null)
+				{
+					var shippingPriceJson = shippingPriceCookie;
+					shippingPrice = JsonConvert.DeserializeObject<decimal>(shippingPriceJson);  //đổi lại về kiểu decimal: giá tiền ban đầu 
+				}
+
+				orderItem.ShippingCost = shippingPrice;
 				orderItem.UserName = userEmail;
 				orderItem.Status = 1; // 1 có nghĩa là đơn hàng mới
 				orderItem.CreateDate = DateTime.Now;

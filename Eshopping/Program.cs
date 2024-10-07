@@ -109,7 +109,8 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+
 //seeding data:tao du lieu trong sql server
-var context=app.Services.CreateScope().ServiceProvider.GetRequiredService<DataContext>();
+var context =app.Services.CreateScope().ServiceProvider.GetRequiredService<DataContext>();
 SeedData.SeedingData(context);
 app.Run();

@@ -10,6 +10,7 @@
 </style>
 
 <div class="col-sm-9 padding-right">
+	<partial name="_FilterProductsPartial" />
 	<div class="features_items">
 		<!--features_items-->
 		<h2 class="title text-center">Features Items</h2>
@@ -507,3 +508,25 @@
 	</div><!--/recommended_items-->
 
 </div>
+
+@section Scripts {
+	<script type="text/javascript">
+		$(document).ready(function () {
+
+			// Khi thay đổi kiểu sắp xếp(vd: giá tăng, giảm dần,...)
+			$('#sort_by').on('change', function () {
+				// Lấy current url từ value của option trong file filter products partial
+				var url = $(this).val();
+
+				if (url) {
+					// Truyền địa chỉ lên đường dẫn trong window
+					window.location = url;
+				}
+
+				return false;
+			});
+
+		});
+	</script>
+
+}
