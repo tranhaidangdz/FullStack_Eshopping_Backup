@@ -510,6 +510,47 @@
 </div>
 
 @section Scripts {
+	<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+	<script src="https://code.jquery.com/ui/1.14.0/jquery-ui.js"></script>
+	<script>
+		$(document).ready(function () {
+    // Khởi tạo slider
+    $("#slider-range").slider({
+        range: true,
+		step: 100,
+        min: 0,
+        max: 50000,
+        values: [2000, 3000],
+        slide: function (event, ui) {
+            $("#amount").val( + ui.values[0] + " vnd" + " - " + ui.values[1] + "vnd");
+        }
+    });
+
+    // Gán giá trị ban đầu cho input
+    $("#amount").val( $("#slider-range").slider("values", 0) + "vnd" + " - " + $("#slider-range").slider("values", 1) + "vnd");
+
+    // Btn lọc giá
+    $('.btn-locgia').on('click', function () {
+        // Lấy đường dẫn hiện tại
+        var url = $(this).data("current_url");
+        // alert(url); Hiển thị đường dẫn hiện tại
+
+        // Nếu có url
+        if (url) {
+            window.location = url + "?startprice=" + $("#slider-range").slider("values", 0)  // Lấy giá trị đầu tiên của slider
+                + "&endprice=" + $("#slider-range").slider("values", 1); // Lấy giá trị thứ hai của slider
+        }
+        return false;
+    });
+});
+
+	
+	</script>
+
+	<script>
+
+	</script>
+
 	<script type="text/javascript">
 		$(document).ready(function () {
 
@@ -522,11 +563,12 @@
 					// Truyền địa chỉ lên đường dẫn trong window
 					window.location = url;
 				}
+				console.log($('.btn-locgia').length);
 
 				return false;
 			});
 
-		});
+
 	</script>
 
 }

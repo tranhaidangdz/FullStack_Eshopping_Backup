@@ -13,7 +13,7 @@ namespace Eshopping.Controllers
 			_dataContext = context;
 		}
 
-		public async Task<IActionResult> Index(String Slug = "pc", string sort_by = "")
+		public async Task<IActionResult> Index(String Slug = "pc", string sort_by = "", string startprice = "", string endprice = "")
 		{
 
 			CategoryModel category = _dataContext.Categories.Where(c => c.Slug == Slug).FirstOrDefault();
@@ -52,12 +52,30 @@ namespace Eshopping.Controllers
 					productsByCategory = productsByCategory.OrderBy(p => p.Id);
 				}
 
+				else if (startprice != "" && endprice != "")
+				{
+					decimal startPriceValue;
+					decimal endPriceValue;
+
+					// Đổi  giá  truyền vào sang số thực
+					if (decimal.TryParse(startprice, out startPriceValue) &&
+						decimal.TryParse(endprice, out endPriceValue))
+					{
+						productsByCategory = productsByCategory.Where(p => p.Price >= startPriceValue && p.Price <= endPriceValue);
+					}
+					else
+					{
+						productsByCategory = productsByCategory.OrderByDescending(p => p.Id);
+					}
+				}
+
 				// Mặc định sẽ săp xếp theo id mới nhất
 				else
 				{
 					productsByCategory = productsByCategory.OrderByDescending(p => p.Id);
 				}
 			}
+
 
 
 			return View(await productsByCategory.ToListAsync());
