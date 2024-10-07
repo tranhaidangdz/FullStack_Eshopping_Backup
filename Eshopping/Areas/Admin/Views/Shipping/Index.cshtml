@@ -3,6 +3,7 @@
     ViewData["title"] = "Create Shipping";
 }
 <h4>Create Shipping</h4>
+
 <style type="text/css">
     .css_select_div {
         text-align: center;
@@ -19,7 +20,7 @@
 </style>
 @* form them sp: để mở trang này : ta vào đg dẫn https://localhost:7135/admin, sau đó bấm add product để chuyển sang trang thêm sp *@
 <div class="col-md-9">
-    <form asp-action="Create" enctype="multipart/form-data">
+
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
         <div class="form-group">
@@ -42,13 +43,57 @@
                 <option value="0">Phường Xã</option>
             </select>
         </div>
+        
+        <div class="form-group">
+            <label>Nhập Giá</label>
+           <input asp-for="Price" id="price-shipping" class="form-control"/>
+        </div>
 
         <div class="form-group">
-            <button class=" btn btn-primary">Create</button>
+            <button type="button" class="btn btn-primary btn-add-shipping">Create</button>
         </div>
-    </form>
-    <a asp-action="Index"asp-controller="Shipping" >Back to List Shipping</a>
+
+
+    @* form in dữ liệu shipping list: *@
+    <h2>Shipping List</h2>
+    <table class="table table-striped" id="myTable">
+        <thead>
+            <tr>
+                <th scope="col">City</th>
+                <th scope="col">District</th>
+                <th scope="col">Ward</th>
+
+                <th scope="col">Price</th>
+                <th scope="col">Action</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var shipping in ViewBag.Shippings)
+            {
+                <tr>
+                    @* hiển thị sp từ csdl dưới dạng 1 bảng: sau này khi chèn thêm các sp vào csdl nó sẽ in ra thông  tin ở đây  *@
+                    <td>@shipping.City</td>
+                    <td>@shipping.District</td>
+
+                    @* Phương thức Html.Raw() sẽ render thô nội dung HTML thay vì escape các ký tự đặc biệt *@
+                    <td>@shipping.Ward</td>
+
+                    <td>@shipping.Price.ToString("#,##0 VNĐ")</td>
+
+                    <td>
+                        <a onclick="return confirm('Bạn có muốn xóa không?')" href="@Url.Action("Delete","Shipping",new{id=shipping.Id})" class="btn btn-danger">Delete</a> 
+                    </td>
+                </tr>
+
+            }
+        </tbody>
+
+    </table>
+    <a asp-action="Index" asp-controller="Shipping" >Back to List Shipping</a>
 </div>
+
+
 @section Scripts
 {
     @{
@@ -56,11 +101,41 @@
     }
     @* ta se cài ckEDITOR4 để có thể chỉnh sửa cỡ chữ, kiểu chữ trong phần description(mô tả).
     giống như ta nhúng word vào trang web vậy, ng dùng có thể trang trí chữ trong phần description
-Lưu ý cái này chỉ AD cho texarea thôi  *@
+    Lưu ý cái này chỉ AD cho texarea thôi  *@
 
-
-@* ta tìm API tỉnh thành phố Việt nam xong vào trang esgoo.net để cop đoạn code này vào *@
+    <script src="https://esgoo.net/scripts/jquery.js"></script>
+    @* ta tìm API tỉnh thành phố Việt nam xong vào trang esgoo.net để cop đoạn code này vào *@
     <script>
+        //khi người dùng nhấn tạo để có thể lấy thông tin tỉnh thành phố và gửi ship:
+        $(".btn-add-shipping").click(function(){
+            //nó sẽ lấy tỉnh , thành phố, xã để trả về:
+            var tinh = $("#tinh").find('option:selected').text();
+            var quan = $("#quan").find('option:selected').text();
+            var phuong = $("#phuong").find('option:selected').text();
+
+            var price = $("#price-shipping").val();
+
+            if(tinh==''||quan==''||phuong==''||price==''){
+                Swal.fire("không được bỏ trống");
+            }else{
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("StoreShipping","Shipping")",
+                    data: { tinh: tinh, quan: quan, phuong: phuong, price: price },
+
+                    success: function (result) {
+                        //successful
+                        if (result.success) {
+                            Swal.fire("Thêm vận chuyển thành công. Tải lại trang để thấy data");
+                            //location.reload();  //xóa tỉnh thành phố cũ vừa chọn 
+
+                        }else if(result.duplicate){
+                            Swal.fire("Dữ liệu trùng lặp");
+                        }
+                    }
+                });
+            }
+        })  //ko đc bỏ ngoặc tròn thừa ở cuối này. RẤT QUAN TRỌNG, NẾU THIẾU NÓ LÀ AJAX KO CHẠY 
         $(document).ready(function() {
             //Lấy tỉnh thành
             $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm',function(data_tinh){
@@ -99,7 +174,7 @@ Lưu ý cái này chỉ AD cho texarea thôi  *@
             });
          });
     </script>
-    <script src="https://esgoo.net/scripts/jquery.js"></script>
+
 
 
 }
