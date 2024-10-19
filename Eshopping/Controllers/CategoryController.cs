@@ -13,7 +13,7 @@ namespace Eshopping.Controllers
 			_dataContext = context;
 		}
 
-		public async Task<IActionResult> Index(String Slug = "pc", string sort_by = "", string startprice = "", string endprice = "")
+		public async Task<IActionResult> Index(String Slug = "Macbook", string sort_by = "", string startprice = "", string endprice = "")
 		{
 
 			CategoryModel category = _dataContext.Categories.Where(c => c.Slug == Slug).FirstOrDefault();
