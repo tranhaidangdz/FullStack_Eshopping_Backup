@@ -11,7 +11,7 @@
 
         <div class="form-group">
             <label>Name</label>
-            <input asp-for="Name" class="form-control" />
+            <input asp-for="Name" autocomplete="off" class="form-control" />
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
 
@@ -22,11 +22,11 @@
         </div>
 
         <div class="form-group">
-            <label>Price</label>
-            <input asp-for="Price" class="form-control"> </input>
-            <span asp-validation-for="Price" class="text-danger"></span>
+            <label>Quantity</label>
+            <input asp-for="Quantity" class="form-control" />
+            <span asp-validation-for="Quantity" class="text-danger"></span>
         </div>
-        
+
         <div class="form-group">
             <label>Date Start</label>
             <input asp-for="DateStart" class="form-control"> </input>
@@ -52,7 +52,87 @@
             <button class=" btn btn-primary">Create</button>
         </div>
     </form>
+
+
+@* list_coupon *@
+<h2>Coupons List</h2>
+<table class="table table-striped" id="myTable">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Description</th>
+            <th scope="col">Date Started</th>
+
+            <th scope="col">Date Expired</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Action</th>
+            <th scope="col">Status</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var coupon in ViewBag.Coupons)
+        {
+            <tr>
+                @* hiển thị sp từ csdl dưới dạng 1 bảng: sau này khi chèn thêm các sp vào csdl nó sẽ in ra thông  tin ở đây  *@
+                <td>@coupon.Name</td>
+                <td>@coupon.Description</td>
+                <td>@coupon.DateStart.ToString("dd-MM-yyyy")</td>
+                <td>@coupon.DateExpired.ToString("dd-MM-yyyy")</td>
+                <td>@coupon.Quantity</td>
+                <td>
+                    @if(coupon.Status==1)
+                    {
+                        <select name="Status">
+                            <option selected value="1">Kích hoạt</option>
+                            <option value="0">Ẩn</option>
+                        </select>
+                    }
+                    else
+                    {
+                        <select name="Status">
+                            <option value="1">Kích hoạt</option>
+                            <option selected value="0">Ẩn</option>
+                        </select>
+                    }
+                </td>
+
+               @* tính toán số ngày còn lại  *@
+               <td>
+                    @if(coupon.DateExpired<DateTime.Now)
+                        {
+                            <span class="text text-danger">Expired</span>
+                        }
+                        else
+                        {
+                            //ngày còn lại = ngày hết hạn dự tính - hiện tại 
+                            TimeSpan remainingTime = coupon.DateExpired - DateTime.Now;
+                            int daysRemaining = remainingTime.Days;
+                            // Nếu số ngày còn lại =0 => thông báo hôm này là hết hạn 
+                            @if(daysRemaining==0)
+                            {
+                                <span class="text text-danger">Today</span>
+                            }
+                            else{
+
+                                <span class="text text-success">@daysRemaining days left</span>
+                            }
+
+                        }
+
+                     
+                    </td>
+            </tr>
+
+        }
+    </tbody>
+
+</table>
+<a asp-action="Index" asp-controller="coupon">Back to List coupon</a>
 </div>
+</div>
+
+
 @section Scripts
 {
     @{

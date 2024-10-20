@@ -41,13 +41,17 @@ namespace Eshopping.Controllers
 				var shippingPriceCookie = Request.Cookies["ShippingPrice"];
 				decimal shippingPrice = 0;
 
-				if (shippingPriceCookie != null)
+                //nhận mã giảm giá từ cookie : 
+                var coupon_code = Request.Cookies["CouponTitle"];
+
+                if (shippingPriceCookie != null)
 				{
 					var shippingPriceJson = shippingPriceCookie;
 					shippingPrice = JsonConvert.DeserializeObject<decimal>(shippingPriceJson);  //đổi lại về kiểu decimal: giá tiền ban đầu 
 				}
 
 				orderItem.ShippingCost = shippingPrice;
+				orderItem.CouponCode = coupon_code;
 				orderItem.UserName = userEmail;
 				orderItem.Status = 1; // 1 có nghĩa là đơn hàng mới
 				orderItem.CreateDate = DateTime.Now;

@@ -4,6 +4,7 @@ using Eshopping.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using static Azure.Core.HttpHeader;
 
 namespace Eshopping.Controllers
 {
@@ -21,7 +22,9 @@ namespace Eshopping.Controllers
 			var shippingPriceCookie = Request.Cookies["ShippingPrice"];
 			decimal shippingPrice = 0;
 
-			if (shippingPriceCookie != null)
+            //nhận mã giảm giá từ cookie : 
+            var coupon_code = Request.Cookies["CouponTitle"];
+            if (shippingPriceCookie != null)
 			{
 				var shippingPriceJson = shippingPriceCookie;
 				shippingPrice = JsonConvert.DeserializeObject<decimal>(shippingPriceJson);  //đổi lại về kiểu decimal: giá tiền ban đầu 
@@ -32,7 +35,8 @@ namespace Eshopping.Controllers
 			{
 				CartItems = cartItems,
 				GrandTotal = cartItems.Sum(x => x.Quantity * x.Price),
-				ShippingCost = shippingPrice
+				ShippingCost = shippingPrice,
+				CouponCode=coupon_code
 			};
 			return View(cartVM);
 		}
@@ -202,5 +206,65 @@ namespace Eshopping.Controllers
 			return RedirectToAction("Index", "Cart");
 
 		}
+
+		//THEM VOUCHER KHUYẾN MÃI:cũng giống như phần shipping ta ko dùng session mà dùng cookie , do session sẽ chết sau 1 khoảng tgian 
+		[HttpPost]
+		[Route("Cart/GetCoupon")]
+		public async Task<IActionResult> GetCoupon(CouponModel couponModel, string coupon_value)
+		{
+			// Kiểm tra mã giảm giá trong cơ sở dữ liệu
+			var validCoupon = await _dataContext.Coupons
+			.FirstOrDefaultAsync(x => x.Name == coupon_value && x.Quantity >= 1);
+			// Nếu không tìm thấy mã giảm giá, trả về thông báo lỗi
+			if (validCoupon == null)
+			{
+				return Ok(new { success = false, message = "Mã giảm giá không tồn tại" });
+			}
+
+			// Nếu mã giảm giá tồn tại, lấy tên và mô tả
+			string couponTitle = validCoupon.Name + "|" + validCoupon.Description;
+
+			if (couponTitle != null)  //néu lấy đc coupon 
+			{
+				TimeSpan remainingTime = validCoupon.DateExpired - DateTime.Now;  //lấy tgian còn lại của coupon so vs hiện tại 
+				int daysRemaining = remainingTime.Days;  //lấy ra ngày còn lại 
+				if (daysRemaining >= 0)
+				{
+					try
+					{
+						var cookieOptions = new CookieOptions  //bắt đầu tạo 1 cookie
+						{
+							HttpOnly = true,  // mở http và https 
+							Expires = DateTimeOffset.UtcNow.AddMinutes(30),  //tgian cookie = ngày hết hạn + 30'
+							Secure = true,
+							SameSite = SameSiteMode.Strict // Kiểm tra tính tương thích trình duyệt
+						};
+						Response.Cookies.Append("CouponTitle", couponTitle, cookieOptions);
+						return Ok(new { success = true, message = "Thêm mã giảm giá thành công" });
+
+					}
+					catch (Exception ex)
+					{
+						//tra ve loi:
+						Console.WriteLine($"Lỗi khi thêm mã giảm giá:{ex.Message}");
+						return Ok(new { success = false, message = "Mã bị lỗi " });
+					}
+				}
+				else
+				{
+					return Ok(new { success = false, message = "Mã đã hết hạn" });
+				}
+			}
+			else  //nếu couponTitle ==null 
+			{
+				return Ok(new { success = false, message = "Mã giảm giá không tồn tại" });
+			}
+			//return Json(new { success = true, message = "Coupon applied successfully!" });
+
+			return Json(new { couponTitle = couponTitle });
+
+		}
+
+
 	}
 }

@@ -15,11 +15,10 @@ namespace Eshopping.Models
 		public DateTime DateStart { get; set; }
 		//ngày kết thúc khuyến mãi
 		public DateTime DateExpired { get; set; }
-		[Required(ErrorMessage = "Yêu cầu giá")]
-		public decimal Price { get; set; }
+
+
 
 		[Required(ErrorMessage = "Yêu cầu nhập số lượng coupon")]
-
 		public int Quantity {  get; set; }
 		public int Status {  get; set; }
 

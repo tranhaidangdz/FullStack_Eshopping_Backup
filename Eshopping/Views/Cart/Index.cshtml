@@ -76,6 +76,12 @@
 						<tr>
 							<td rowspan="10">
 							Grand Total:<p class="cart_total_price"> @Model.GrandTotal.ToString("#,##0 VNĐ")</p>
+							<form>
+
+							Coupon Code:<input type="text" class="form-control coupon-value" />
+							<span class="text text-success">@Model.CouponCode</span>
+							<input type="button" value="Apply" class="btn btn-sm btn-primary btn-apply-coupon"/>
+							</form>
 							Shipping Cost:<p class="cart_total_price"> @Model.ShippingCost.ToString("#,##0 VNĐ")</p>
 
 								<p>	<a asp-action="RemoveShippingCookie" asp-controller="Cart">Xóa Shipping</a> </p>
@@ -139,6 +145,32 @@
 
 @section Scripts
 {
+	@* khi người dùng ấn nút thêm coupon: *@
+	<script>
+		$(".btn-apply-coupon").click(function () {
+			var coupon_value= $(".coupon-value").val();
+			//alert(coupon_value);
+			$.ajax({
+				type: "POST",
+				url: "@Url.Action("GetCoupon", "Cart")",
+				data: { coupon_value: coupon_value },
+				success: function (result) {  //ta ktra nếu mã giảm giá đó còn lại => lấy ra đc và ta hiện thông báo
+					if (result.success) {
+						Swal.fire(result.message).then(() => {
+							setTimeout(function () {
+								location.reload();  //Bạn đang gọi location.reload() khi ajax thành công. 
+								//Điều này sẽ tải lại toàn bộ trang sau khi áp dụng coupon, nhưng trước khi nó tải lại,
+								//  SweetAlert có thể không hiển thị do trang đã được reload. Để hiển thị thông báo trước khi tải lại trang, bạn có thể thêm một thời gian chờ bằng setTimeout
+							}, 1500); // Đợi 1.5 giây trước khi tải lại trang
+						});
+					} else {
+						Swal.fire(result.message);
+					}
+				}
+			});
+		});
+	</script>
+
 	<script>
 		//khi người dùng nhấn tạo để có thể lấy thông tin tỉnh thành phố và gửi ship:
 		$(".btn-add-shipping").click(function () {
@@ -206,4 +238,6 @@
 			});
 		});
 	</script>
+
+
 }
