@@ -49,10 +49,13 @@
             <td>@total.ToString("#,##0 VNĐ")</td>
             <td>Shipping cost: @ViewBag.ShippingCost.ToString("#,##0 VNĐ")</td>
             <td>
+                  @if (@ViewBag.Status != 3)  //mếu đơn hàng nào đã hủy => ta ko cho hiện lựa chọn select này nữa 
+                    {
                 <select class="form-control select-update-order">
-    <option value="1">Đơn hàng mới</option>
-    <option value="0">Đã xử lý</option>
-        </select>
+                    <option value="1">Đơn hàng mới</option>
+                    <option value="0">Đã xử lý</option>
+                        </select>
+                    }
             </td>
         </tr>
     </tbody>

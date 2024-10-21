@@ -1,9 +1,9 @@
 ﻿@model IEnumerable<OrderModel>
 @{
-	ViewData["title"] = "Order List";
+    ViewData["title"] = " List History Orders placed by "+" "+@ViewBag.UserEmail;
 }
 
-<h4>List Order </h4>
+<h3 style="font-weight:bold">List History Orders placed by :<span style="color:cadetblue">@ViewBag.UserEmail</span>  </h3>
 <table class="table" id="myTable">
     <thead>
         <tr>
@@ -15,7 +15,7 @@
             <th scope="col">Order Date</th>
             <th scope="col">Order Status</th>
             <th scope="col">Action</th>
-  
+
         </tr>
     </thead>
     <tbody>
@@ -25,8 +25,8 @@
                 <th scope="row">@item.Id</th>
                 @* hiển thị sp từ csdl dưới dạng 1 bảng: sau này khi chèn thêm các sp vào csdl nó sẽ in ra thông  tin ở đây  *@
                 <th scope="row">@item.OrderCode</th>
-                    <th scope="row">@item.ShippingCost.ToString("#,##0 VNĐ")</th>
-                    <th scope="row">@item.CouponCode</th>
+                <th scope="row">@item.ShippingCost.ToString("#,##0 VNĐ")</th>
+                <th scope="row">@item.CouponCode</th>
                 <td>@item.UserName</td>
 
                 @* Phương thức Html.Raw() sẽ render thô nội dung HTML thay vì escape các ký tự đặc biệt *@
@@ -40,17 +40,19 @@
                     else if (item.Status == 2)
                     {
                         <span class="text text-primary">Đơn hàng đã xử lý</span>
-                    }
-                    else
+                    } 
+                    else 
                     {
                         <span class="text text-danger">Đơn hàng đã hủy</span>
                     }
                 </td>
 
                 <td>
-                    @* chỉnh sửa or xóa sp trong admin nó sẽ dựa vào id của sp đó, từ id đó trả  về thông tin sp *@
-                    <a asp-action="ViewOrder" class="btn btn-warning btn-sm" asp-controller="Order" asp-route-ordercode="@item.OrderCode">View Order</a>
-                    <a asp-action="Delete" class="btn btn-danger btn-sm confirmDeletion" asp-controller="Order" asp-route-Id="@item.Id">Delete</a>
+                    @* ta ktra nếu trạng thái đơn hàng ở trên != 3 => ta mới hiển thị nút cho ngta hủy, còn ==3 (đơn hàng đã hủy) ; thì ta ẩn nút Cancel Order đi luôn k *@
+                    @if (item.Status != 3)
+                    {
+                        <a asp-action="CancelOrder" class="btn btn-danger btn-sm" asp-controller="Account" asp-route-ordercode="@item.OrderCode">Cancel Order</a>
+                    }
                 </td>
             </tr>
 

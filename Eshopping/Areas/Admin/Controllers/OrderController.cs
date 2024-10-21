@@ -25,8 +25,9 @@ namespace Eshopping.Areas.Admin.Controllers
 			var DetailsOrder = await _dataContext.OrderDetails.Include(od => od.Product).Where(od => od.OrderCode == ordercode).ToListAsync();
 
 			// Lấy shipping cost
-			var ShippingCost = _dataContext.Orders.Where(o => o.OrderCode == ordercode).First();
-			ViewBag.ShippingCost = ShippingCost.ShippingCost;
+			var Order = _dataContext.Orders.Where(o => o.OrderCode == ordercode).First();
+			ViewBag.ShippingCost = Order.ShippingCost;
+			ViewBag.Status = Order.ShippingCost;
 
 
 			return View(DetailsOrder);

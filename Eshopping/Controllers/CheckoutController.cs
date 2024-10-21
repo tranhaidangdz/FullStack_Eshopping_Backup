@@ -96,10 +96,11 @@ namespace Eshopping.Controllers
 				await _emailSender.SendEmailAsync(receiver, subject, message);
 
 				TempData["success"] = "Checkout thành công, vui lòng chờ đơn hàng được duyệt";
-				return View("Index", "Cart");
+                //return View("History", "Account"); // trả về view từ một controller khác, bạn cần sử dụng phương thức RedirectToAction
+                return RedirectToAction("History", "Account");
 
-			}
-			return View();
+            }
+            return View();
 		}
 	}
 }
