@@ -1,4 +1,5 @@
-﻿using Eshopping.Models;
+﻿using Eshopping.Areas.Admin.Repository;
+using Eshopping.Models;
 using Eshopping.Models.ViewModels;
 using Eshopping.Repository;
 using Microsoft.AspNetCore.Identity;
@@ -14,18 +15,80 @@ namespace Eshopping.Controllers
 		private UserManager<AppUserModel> _userManage;
 		private SignInManager<AppUserModel> _signInManager;
 		private readonly DataContext _dataContext;
-		public AccountController(SignInManager<AppUserModel> signInManager, UserManager<AppUserModel> userManage,DataContext context)
+		private readonly IEmailSender _emailSender;
+		public AccountController(IEmailSender emailSender,SignInManager<AppUserModel> signInManager, UserManager<AppUserModel> userManage,DataContext context)
 		{
+			_emailSender = emailSender;
 			_signInManager = signInManager;
 			_userManage = userManage;
 			_dataContext = context;
 		}
+		//trả về view đăng nhập TK 
 		public IActionResult Login(string returnUrl)
 		{
 			return View(new LoginViewModel { ReturnUrl = returnUrl}); // Trả về login view model (username, password)
 		}
+		//trả về view quên mật khẩu TK 
+
+		public async Task<IActionResult> NewPass(AppUserModel user, string token)
+		{
+			//ta ktra xem email của user yêu cầu đổi mk có giống vs email yêu cầu ko 
+			var checkuser = await _userManage.Users
+			.Where(u => u.Email == user.Email)
+			.Where(u => u.Token== user.Token).FirstOrDefaultAsync();  //FirstOrDefaultAsync(); lấy ra dòng đầu tiên của dữ liệu thôi 
+			//lấy thông tin email và đoạn token 
+			if (checkuser != null)
+			{
+				ViewBag.Email = checkuser.Email;
+				ViewBag.Token = token;
+			}
+			else
+			{
+				TempData["error"] = "Email không tìm thấy hoặc  token không đúng !";
+				return RedirectToAction("Forgot Pass", "Account");
+			}
+			return View();
+		}
+		//trả về view tạo mk mới   
+		public async Task<IActionResult> ForgetPass(string returnUrl)
+		{
+			return View(); 
+		}
+
+
+		//CHỨC NĂNG GỬI MAIL QUÊN MK :
+		[HttpPost]
+		public async Task<IActionResult> SendMailForgotPass(AppUserModel user)
+		{
+			var checkMail = await _userManage.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
+			if (checkMail == null)
+			{
+				TempData["error"] = "Email không tồn tại";
+				return RedirectToAction("ForgetPass", "Account");
+			}
+			else
+			{
+				string token = Guid.NewGuid().ToString();
+				//update token to user
+				checkMail.Token = token;
+				_dataContext.Update(checkMail);
+				await _dataContext.SaveChangesAsync();
+
+				//update token to user
+				var receiver = checkMail.Email;
+				var subject = "Đổi mật khẩu cho tài khoản " + checkMail.Email;
+				var message = "Bấm vào link để đổi mật khẩu : " +
+				"<a href='" + $" {Request.Scheme}://{Request.Host}/Account/NewPass" +
+				$"?email=" + checkMail.Email + "&token=" + token + "'>";
+
+				await _emailSender.SendEmailAsync(receiver, subject, message);
+			}
+			TempData["success"] = "Đã gửi email đặt lại mật khẩu đến địa chỉ email của bạn!";
+			return RedirectToAction("ForgetPass", "Account");
+		}
 
 		[HttpPost]
+		//[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Login(LoginViewModel loginVM)
 		{
 			if(ModelState.IsValid)
@@ -111,5 +174,8 @@ namespace Eshopping.Controllers
 			await _signInManager.SignOutAsync();
 			return Redirect(returnUrl);
 		}
+
+
+		
 	}
 }

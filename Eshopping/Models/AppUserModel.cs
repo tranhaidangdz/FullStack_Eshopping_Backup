@@ -6,5 +6,6 @@ namespace Eshopping.Models
 	{
 		public string Occupation {  get; set; }
 		public string RoleId {  get; set; }
+		public string Token {  get; set; }
 	}
 }

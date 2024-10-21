@@ -1,7 +1,7 @@
-﻿@model LoginViewModel
+﻿@model AppUserModel
 
 @{
-	ViewData["Title"] = "Login";
+	ViewData["Title"] = "Forget Password";
 }
 <section id="">
 	<!--form-->
@@ -10,26 +10,21 @@
 			<div class="col-sm-8 col-sm-offset-1">
 				<div class="login-form">
 					<!--login form-->
-					<h2>Login to your account</h2>
+					<h2>Forget Password</h2>
 					<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-					<form asp-action="Login" asp-controller="Account">
-						<div class="form-group">
-							<label>Username</label>
-							<input asp-for="Username" class="form-control" />
-							<span asp-validation-for="Username" class="text-danger"></span>
-						</div>
+					<form asp-action="SendMailForgotPass" asp-controller="Account">
 
 						<div class="form-group">
-							<label> Password</label>
-							<input asp-for="Password" class="form-control" />
-							<span asp-validation-for="Password" class="text-danger"></span>
+							<label>Email</label>
+							<input asp-for="Email" class="form-control" />
+							<span asp-validation-for="Email" class="text-danger"></span>
 						</div>
-						<button class="btn btn-default">Login</button>
+
+						<button class="btn btn-default">Gửi</button>
 						<a asp-action="Create" asp-controller="Account">Tạo tài khoản mới</a> <br />
-						<a asp-action="ForgetPass" asp-controller="Account">Quên mật khẩu</a>
 
 					</form>
-				</div><!--/login form-->
+				</div><!--/login form-- >
 			</div>
 		</div>
 	</div>
