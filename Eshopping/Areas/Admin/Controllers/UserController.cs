@@ -1,5 +1,6 @@
 ﻿using Eshopping.Models;
 using Eshopping.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -10,17 +11,20 @@ namespace Eshopping.Areas.Admin.Controllers
 {
 	[Area("Admin")]
 	[Route("Admin/User")]
+	[Authorize(Roles = "Admin")]
 	public class UserController : Controller
 	{
 		private readonly UserManager<AppUserModel> _userManager;
 		private readonly RoleManager<IdentityRole> _roleManager;
 		private readonly DataContext _dataContext;
+
 		public UserController(DataContext context, UserManager<AppUserModel> userManager, RoleManager<IdentityRole> roleManager)
 		{
 			_userManager = userManager;
 			_roleManager = roleManager;
 			_dataContext = context;
 		}
+
 		[HttpGet]
 		[Route("Index")]
 		public async Task<IActionResult> Index()
@@ -72,12 +76,12 @@ namespace Eshopping.Areas.Admin.Controllers
 				var createuserResult = await _userManager.CreateAsync(user, user.PasswordHash); // Tao user
 				if (createuserResult.Succeeded)
 				{
-					var createUser = await _userManager.FindByEmailAsync(user.Email); // Tim user dua tren email
+					var createUser = await _userManager.FindByEmailAsync(user.Email); // Tim user  dua tren email
 					var userId = createUser.Id; // Lay user id
 					var role = _roleManager.FindByIdAsync(user.RoleId); // Lay role id
 
 
-					// Gan quyen truy cap
+					// Gan role cho user vua taoj
 					var addToRoleResult = await _userManager.AddToRoleAsync(createUser, role.Result.Name);
 
 					if (!addToRoleResult.Succeeded)
@@ -164,8 +168,28 @@ namespace Eshopping.Areas.Admin.Controllers
 				existingUser.PhoneNumber = user.PhoneNumber;
 				existingUser.RoleId = user.RoleId;
 				var updateUserResult = await _userManager.UpdateAsync(existingUser);
+
 				if (updateUserResult.Succeeded)
 				{
+					// Tìm user-role trong bảng AspUserRoles
+					var userRole = _dataContext.UserRoles.SingleOrDefault(ur => ur.UserId == id);
+
+					if (userRole != null)
+					{
+						// Xóa bản ghi user-role cũ
+						_dataContext.UserRoles.Remove(userRole);
+						await _dataContext.SaveChangesAsync();
+					}
+
+					// Thêm bản ghi mới với RoleId mới
+					var newUserRole = new IdentityUserRole<string>
+					{
+						UserId = id,
+						RoleId = user.RoleId
+					};
+					_dataContext.UserRoles.Add(newUserRole);
+					await _dataContext.SaveChangesAsync();
+
 					return RedirectToAction("Index", "User");
 				}
 				else

@@ -8,7 +8,7 @@ namespace Eshopping.Areas.Admin.Controllers
 {
 	[Area("Admin")]
 	[Route("Admin/Shipping")]
-	//[Authorize(Roles="Publisher,Author,Admin")]
+	[Authorize(Roles= "Admin")]
 	public class ShippingController : Controller
 	{
         private readonly DataContext _dataContext;

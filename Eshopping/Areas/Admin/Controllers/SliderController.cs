@@ -8,17 +8,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Eshopping.Areas.Admin.Controllers
 {
-		[Area("Admin")]
-		[Route("Admin/Slider")]
-		//[Authorize(Roles = "Publisher,Author,Admin")]
-	public class SliderController:Controller
+	[Area("Admin")]
+	[Route("Admin/Slider")]
+	[Authorize(Roles = "Admin")]
+	public class SliderController : Controller
 	{
 		private readonly DataContext _dataContext;
-        private readonly IWebHostEnvironment _webHostEnvironment; //IWebHostEnvironment: để load file ảnh thì phải có dòng này 
-        public SliderController(DataContext context, IWebHostEnvironment webHostEnvironment)
+		private readonly IWebHostEnvironment _webHostEnvironment; //IWebHostEnvironment: để load file ảnh thì phải có dòng này 
+		public SliderController(DataContext context, IWebHostEnvironment webHostEnvironment)
 		{
 			_dataContext = context;
-            _webHostEnvironment = webHostEnvironment;
+			_webHostEnvironment = webHostEnvironment;
 		}
 
 		[Route("Index")]
@@ -27,130 +27,130 @@ namespace Eshopping.Areas.Admin.Controllers
 		{
 			return View(await _dataContext.Sliders.OrderBy(p => p.Id).ToListAsync());
 		}
-        [Route("Create")]
-        public IActionResult Create() //trả về index view của slider 
-        {
-           
-            return View();
-        }
+		[Route("Create")]
+		public IActionResult Create() //trả về index view của slider 
+		{
 
-        //create slider: thêm ảnh đề tạo slider:
-        [Route("Create")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(SliderModel slider)  //lấy ds và thương hiệu của form (nhận từ ng dùng ) sau đó so sánh với các sp đã có trong csdl 
-        {
-            if (ModelState.IsValid)
-            {
-               
-                if (slider.ImageUpload != null)
-                {
-                    string uploadsDir = Path.Combine(_webHostEnvironment.WebRootPath, "media/sliders");
-                    string imageName = Guid.NewGuid().ToString() + "_" + slider.ImageUpload.FileName;
-                    string filePath = Path.Combine(uploadsDir, imageName);
+			return View();
+		}
 
-                    FileStream fs = new FileStream(filePath, FileMode.Create);
-                    await slider.ImageUpload.CopyToAsync(fs);
-                    fs.Close();
-                    slider.Image = imageName;
-                }
+		//create slider: thêm ảnh đề tạo slider:
+		[Route("Create")]
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Create(SliderModel slider)  //lấy ds và thương hiệu của form (nhận từ ng dùng ) sau đó so sánh với các sp đã có trong csdl 
+		{
+			if (ModelState.IsValid)
+			{
 
-                _dataContext.Add(slider);
-                await _dataContext.SaveChangesAsync();
-                TempData["success"] = "Thêm slider thành công";  //slider: thanh trượt: chính là menu trượt ở giữa trang chủ mỗi trang web 
-                return RedirectToAction("Index");
+				if (slider.ImageUpload != null)
+				{
+					string uploadsDir = Path.Combine(_webHostEnvironment.WebRootPath, "media/sliders");
+					string imageName = Guid.NewGuid().ToString() + "_" + slider.ImageUpload.FileName;
+					string filePath = Path.Combine(uploadsDir, imageName);
 
-            }
-            else
-            {
-                TempData["error"] = "Model có 1 vài thứ đang bị lỗi";
-                List<string> errors = new List<string>();
-                foreach (var value in ModelState.Values)
-                {
-                    foreach (var error in value.Errors)
-                    {
-                        errors.Add(error.ErrorMessage);
-                    }
-                }
-                string errorMessage = string.Join("\n", errors);
-                return BadRequest(errorMessage);
-            }
-            return View(slider);
-        }
-        //edit slider 
-        [Route("Edit")]
-        public async Task<IActionResult> Edit(int Id)
-        {
-            SliderModel slider = await _dataContext.Sliders.FindAsync(Id);
-            return View(slider);
-        }
+					FileStream fs = new FileStream(filePath, FileMode.Create);
+					await slider.ImageUpload.CopyToAsync(fs);
+					fs.Close();
+					slider.Image = imageName;
+				}
 
-        //Edit slider: thêm ảnh đề Edit slider:
-        [Route("Edit")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(SliderModel slider)  //lấy ds và thương hiệu của form (nhận từ ng dùng ) sau đó so sánh với các sp đã có trong csdl 
-        {
-            var slider_exited = _dataContext.Sliders.Find(slider.Id);
-            if (ModelState.IsValid)
-            {
+				_dataContext.Add(slider);
+				await _dataContext.SaveChangesAsync();
+				TempData["success"] = "Thêm slider thành công";  //slider: thanh trượt: chính là menu trượt ở giữa trang chủ mỗi trang web 
+				return RedirectToAction("Index");
 
-                if (slider.ImageUpload != null)
-                {
-                    string uploadsDir = Path.Combine(_webHostEnvironment.WebRootPath, "media/sliders");
-                    string imageName = Guid.NewGuid().ToString() + "_" + slider.ImageUpload.FileName;
-                    string filePath = Path.Combine(uploadsDir, imageName);
+			}
+			else
+			{
+				TempData["error"] = "Model có 1 vài thứ đang bị lỗi";
+				List<string> errors = new List<string>();
+				foreach (var value in ModelState.Values)
+				{
+					foreach (var error in value.Errors)
+					{
+						errors.Add(error.ErrorMessage);
+					}
+				}
+				string errorMessage = string.Join("\n", errors);
+				return BadRequest(errorMessage);
+			}
+			return View(slider);
+		}
+		//edit slider 
+		[Route("Edit")]
+		public async Task<IActionResult> Edit(int Id)
+		{
+			SliderModel slider = await _dataContext.Sliders.FindAsync(Id);
+			return View(slider);
+		}
 
-                    FileStream fs = new FileStream(filePath, FileMode.Create);
-                    await slider.ImageUpload.CopyToAsync(fs);
-                    fs.Close();
-                    slider_exited.Image = imageName;
-                }
-                slider_exited.Name = slider.Name;
-                slider_exited.Description = slider.Description;
-                slider_exited.Status = slider.Status;
+		//Edit slider: thêm ảnh đề Edit slider:
+		[Route("Edit")]
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Edit(SliderModel slider)  //lấy ds và thương hiệu của form (nhận từ ng dùng ) sau đó so sánh với các sp đã có trong csdl 
+		{
+			var slider_exited = _dataContext.Sliders.Find(slider.Id);
+			if (ModelState.IsValid)
+			{
 
-                _dataContext.Update(slider_exited);
-                await _dataContext.SaveChangesAsync();
-                TempData["success"] = "Cập nhật slider thành công";  //slider: thanh trượt: chính là menu trượt ở giữa trang chủ mỗi trang web 
-                return RedirectToAction("Index");
+				if (slider.ImageUpload != null)
+				{
+					string uploadsDir = Path.Combine(_webHostEnvironment.WebRootPath, "media/sliders");
+					string imageName = Guid.NewGuid().ToString() + "_" + slider.ImageUpload.FileName;
+					string filePath = Path.Combine(uploadsDir, imageName);
 
-            }
-            else
-            {
-                TempData["error"] = "Model có 1 vài thứ đang bị lỗi";
-                List<string> errors = new List<string>();
-                foreach (var value in ModelState.Values)
-                {
-                    foreach (var error in value.Errors)
-                    {
-                        errors.Add(error.ErrorMessage);
-                    }
-                }
-                string errorMessage = string.Join("\n", errors);
-                return BadRequest(errorMessage);
-            }
-            return View(slider);
-        }
+					FileStream fs = new FileStream(filePath, FileMode.Create);
+					await slider.ImageUpload.CopyToAsync(fs);
+					fs.Close();
+					slider_exited.Image = imageName;
+				}
+				slider_exited.Name = slider.Name;
+				slider_exited.Description = slider.Description;
+				slider_exited.Status = slider.Status;
 
-        [Route("Delete")]
-        //delete slider: gửi id slider về trang edit :
-        public async Task<IActionResult> Delete(int Id)
-        {
-        SliderModel slider = await _dataContext.Sliders.FindAsync(Id);
-            if (!string.Equals(slider.Image, "noname.jpg"))
-            {
-                string uploadsDir = Path.Combine(_webHostEnvironment.WebRootPath, "media/sliders");
-                string oldfileImage = Path.Combine(uploadsDir, slider.Image);
-                if (System.IO.File.Exists(oldfileImage))
-                {
-                    System.IO.File.Delete(oldfileImage);
-                }
-            }
-            _dataContext.Sliders.Remove(slider);
-            await _dataContext.SaveChangesAsync();
-            TempData["error"] = "Sản phẩm đã xóa";
-            return RedirectToAction("Index");
-        }
-    }
+				_dataContext.Update(slider_exited);
+				await _dataContext.SaveChangesAsync();
+				TempData["success"] = "Cập nhật slider thành công";  //slider: thanh trượt: chính là menu trượt ở giữa trang chủ mỗi trang web 
+				return RedirectToAction("Index");
+
+			}
+			else
+			{
+				TempData["error"] = "Model có 1 vài thứ đang bị lỗi";
+				List<string> errors = new List<string>();
+				foreach (var value in ModelState.Values)
+				{
+					foreach (var error in value.Errors)
+					{
+						errors.Add(error.ErrorMessage);
+					}
+				}
+				string errorMessage = string.Join("\n", errors);
+				return BadRequest(errorMessage);
+			}
+			return View(slider);
+		}
+
+		[Route("Delete")]
+		//delete slider: gửi id slider về trang edit :
+		public async Task<IActionResult> Delete(int Id)
+		{
+			SliderModel slider = await _dataContext.Sliders.FindAsync(Id);
+			if (!string.Equals(slider.Image, "noname.jpg"))
+			{
+				string uploadsDir = Path.Combine(_webHostEnvironment.WebRootPath, "media/sliders");
+				string oldfileImage = Path.Combine(uploadsDir, slider.Image);
+				if (System.IO.File.Exists(oldfileImage))
+				{
+					System.IO.File.Delete(oldfileImage);
+				}
+			}
+			_dataContext.Sliders.Remove(slider);
+			await _dataContext.SaveChangesAsync();
+			TempData["error"] = "Sản phẩm đã xóa";
+			return RedirectToAction("Index");
+		}
+	}
 }

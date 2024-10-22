@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Eshopping.Repository
 {
-    public class DataContext:IdentityDbContext<AppUserModel>
+    public class DataContext : IdentityDbContext<AppUserModel>
     {
         public DataContext(DbContextOptions<DataContext>options):base(options) 
         {

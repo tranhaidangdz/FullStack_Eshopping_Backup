@@ -9,12 +9,13 @@ namespace Eshopping.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/Role")]
-    //[Authorize(Roles ="Admin")]
+    [Authorize(Roles ="Admin")]
     public class RoleController : Controller
     {
         private readonly DataContext _dataContext;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<AppUserModel> _userManager;
+
         public RoleController(DataContext context, RoleManager<IdentityRole> roleManager, UserManager<AppUserModel> userManager)
         {
             _dataContext = context;
@@ -27,12 +28,14 @@ namespace Eshopping.Areas.Admin.Controllers
         {
             return View(await _dataContext.Roles.OrderByDescending(p=>p.Id).ToListAsync());
         }
+
         [HttpGet]
         [Route("Create")]
         public IActionResult Create()
         {
             return View();
         }  
+
         //==================================================================
         [HttpGet]
         [Route("Edit")]
@@ -79,6 +82,7 @@ namespace Eshopping.Areas.Admin.Controllers
             // nếu model ko tồn tại or idenntityrole ko tồn tại=> trả về view với id của role hiện tại 
             return View(model ?? new IdentityRole { Id=id});
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Create")]
@@ -95,7 +99,7 @@ namespace Eshopping.Areas.Admin.Controllers
         //delete:
         [HttpGet]
         [Route("Delete")]
-        public async Task<IActionResult> Delete (string id)
+        public async Task<IActionResult> Delete(string id)
         {
             if(string.IsNullOrEmpty(id))
             {

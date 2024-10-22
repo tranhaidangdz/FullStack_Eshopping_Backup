@@ -8,7 +8,7 @@ namespace Eshopping.Areas.Admin.Controllers
 {
 	[Area("Admin")]
 	[Route("Admin/Coupon")]
-	//[Authorize(Roles = "Admin")]// phân quyền truy cập manage branch 
+	[Authorize(Roles = "Admin")]// phân quyền truy cập manage branch 
 	public class CouponController : Controller
 	{
 		private readonly DataContext _dataContext;

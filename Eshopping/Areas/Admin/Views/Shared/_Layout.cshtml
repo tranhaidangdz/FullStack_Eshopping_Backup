@@ -69,7 +69,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.14.0/dist/sweetalert2.min.css
 			<!--header-bottom-->
 			<div class="container">
 				<div class="row">
-					<div class="col-sm-9">
+					<div class="col-sm-12">
 						<div class="navbar-header">
 							<button type="button" class="navbar-toggle" data-toggle="collapse"
 									data-target=".navbar-collapse">
@@ -83,7 +83,6 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.14.0/dist/sweetalert2.min.css
 							<ul class="nav navbar-nav collapse navbar-collapse">
 								<li><a asp-action="Index" asp-controller="Home" class="active">Home</a></li>
 								<li><a asp-action="Index" asp-controller="Slider" >Manage Slider</a></li>
-							
 								<li><a asp-action="Index" asp-controller="Product">Manage Product</a></li>
 								<li><a asp-action="Index" asp-controller="Shipping">Manage Shipping</a></li>
 								<li><a asp-action="Index" asp-controller="Coupon">Manage Coupons</a></li>
@@ -94,11 +93,6 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.14.0/dist/sweetalert2.min.css
 								<li><a asp-action="Index" asp-controller="Order">Manage Order</a></li>
 								<li><a asp-action="Index" asp-controller="Contact">Manage Contact</a></li>
 							</ul>
-						</div>
-					</div>
-					<div class="col-sm-3">
-						<div class="search_box pull-right">
-							<input type="text" placeholder="Search" />
 						</div>
 					</div>
 				</div>
@@ -171,7 +165,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.14.0/dist/sweetalert2.all.min.js
         });
 			// Phát nhạc khi SweetAlert xuất hiện
 			var audio = new Audio('/media/Rick-Roll-Sound-Effect.mp3');
-			audio.play();
+			// audio.play();
 });
 
 		</script>

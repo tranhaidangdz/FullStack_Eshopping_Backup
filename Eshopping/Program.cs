@@ -27,10 +27,12 @@ builder.Services.AddSession(option =>
 }
 );
 //đki chức năng đăng nhập đăng kí trang web asp:
-//builder.Services.AddDbContext<DbContext>();
 
+// Cấu hình Identity
 builder.Services.AddIdentity<AppUserModel, IdentityRole>()
-	.AddEntityFrameworkStores<DataContext>().AddDefaultTokenProviders();
+	.AddEntityFrameworkStores<DataContext>() // DataContext lưu trữ bảng Identity
+	.AddDefaultTokenProviders();
+
 //thừa
 builder.Services.AddAuthentication();
 builder.Services.Configure<IdentityOptions>(options =>

@@ -10,9 +10,9 @@
         <tr>
             <th scope="col">STT</th>
             <th scope="col">Id</th>
-            <th scope="col">Name</th>
+            <th scope="col">Username</th>
             <th scope="col">Email</th>
-            <th scope="col">PasswordHash</th>
+            @* <th scope="col">PasswordHash</th> *@
 
             <th scope="col">Phone</th>
             <th scope="col">Role name</th>
@@ -32,11 +32,11 @@
                 <td>@usersWithRoles.User.Email</td>
 
                 @* Phương thức Html.Raw() sẽ render thô nội dung HTML thay vì escape các ký tự đặc biệt *@
-                <td>@usersWithRoles.User.PasswordHash</td>
+                @* <td>@usersWithRoles.User.PasswordHash</td> *@
 
                 <td>@usersWithRoles.User.PhoneNumber</td>
                  @* <td>@usersWithRoles.RoleName</td> *@
-                 <td>@usersWithRoles.User.RoleId</td>
+                 <td>@usersWithRoles.RoleName</td>
                 <td>
                     @* chỉnh sửa or xóa sp trong admin nó sẽ dựa vào id của sp đó, từ id đó trả  về thông tin sp *@
                     <a asp-action="Edit" class="btn btn-warning btn-sm" asp-controller="User" asp-route-Id="@usersWithRoles.User.Id">Edit</a>

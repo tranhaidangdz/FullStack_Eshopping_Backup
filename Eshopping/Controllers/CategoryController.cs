@@ -27,7 +27,7 @@ namespace Eshopping.Controllers
 
 			if (count > 0)
 			{
-				// Sắp xếp giá tăng dần
+				// Sắp xếp giá tăng dần 
 
 				if (sort_by == "price_increase")
 				{

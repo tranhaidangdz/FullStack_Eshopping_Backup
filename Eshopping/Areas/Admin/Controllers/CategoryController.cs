@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Eshopping.Areas.Admin.Controllers
 {
 	[Area("Admin")]
-	[Authorize]
+	[Authorize(Roles = "Admin")]
 	public class CategoryController:Controller
 	{
 		

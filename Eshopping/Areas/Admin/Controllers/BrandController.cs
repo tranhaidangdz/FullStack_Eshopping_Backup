@@ -9,7 +9,7 @@ namespace Eshopping.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/Brand")]
-    //[Authorize(Roles = "Admin")] phân quyền truy cập manage branch 
+    [Authorize(Roles = "Admin")] //phân quyền truy cập manage branch 
     public class BrandController : Controller
     {
         private readonly DataContext _dataContext;
@@ -32,7 +32,7 @@ namespace Eshopping.Areas.Admin.Controllers
             int recsCount = brand.Count(); // 33 items
 
             var pager = new Paginate(recsCount, pg, pageSize);
-
+            
             int recSkip = (pg - 1) * pageSize; // (1-1) * 10
 
             /*
