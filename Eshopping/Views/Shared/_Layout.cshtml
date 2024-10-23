@@ -131,16 +131,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.14.0/dist/sweetalert2.min.css
 						</div>
 						<div class="mainmenu pull-left">
 							<ul class="nav navbar-nav collapse navbar-collapse">
-								<li><a asp-controller="Home" class="active">Home</a></li>
-								<li class="dropdown"><a href="#">Shop<i class="fa fa-angle-down"></i></a>
-									<ul role="menu" class="sub-menu">
-										<li><a asp-controller="Category" asp-action="Index" >Category</a></li>
-										<li><a asp-controller="Product" asp-action="Details">Product Details</a></li>
-										<li><a asp-controller="Checkout" asp-action="Index">Checkout</a></li>
-										<li><a asp-controller="Cart" asp-action="Index">Cart</a></li>
-										<li><a >Login</a></li>
-									</ul>
-								</li>
+								<li><a asp-controller="Home" asp-action="Index" class="active">Home</a></li>
 
 								<li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
 							</ul>

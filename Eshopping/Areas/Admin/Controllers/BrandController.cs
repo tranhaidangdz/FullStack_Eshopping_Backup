@@ -124,41 +124,59 @@ namespace Eshopping.Areas.Admin.Controllers
         public async Task<IActionResult> Edit(BrandModel brand)  //lấy ds và thương hiệu của form (nhận từ ng dùng ) sau đó so sánh với các sp đã có trong csdl 
         {
 
-            if (ModelState.IsValid)
-            {
-                //code them du lieu san pham:
-                //TempData["success"] = "Model ok hết rồi";
-                brand.Slug = brand.Name.Replace(" ", "-");
-                var slug = await _dataContext.Categories.FirstOrDefaultAsync(p => p.Slug == brand.Slug);
+			if (ModelState.IsValid)
+			{
+				// Tạo slug mới từ tên brand
+				brand.Slug = brand.Name.Replace(" ", "-");
 
-                if (slug != null)
-                {
-                    ModelState.AddModelError("", "Thương hiệu này đã có trong Database");
-                    return View(brand);
-                }
+				// Kiểm tra xem có slug nào giống trong bảng Brands không (thay vì Categories)
+				var slugExists = await _dataContext.Brands
+									 .Where(b => b.Slug == brand.Slug && b.Id != brand.Id) // Loại trừ brand hiện tại
+									 .FirstOrDefaultAsync();
 
-                _dataContext.Update(brand);
-                await _dataContext.SaveChangesAsync();
-                TempData["success"] = "Cập nhật thương hiệu thành công";
-                return RedirectToAction("Index");
+				if (slugExists != null)
+				{
+					ModelState.AddModelError("", "Thương hiệu này đã có trong Database");
+					return View(brand);
+				}
 
-            }
-            else
-            {
-                TempData["error"] = "Model có 1 vài thứ đang bị lỗi";
-                List<string> errors = new List<string>();
-                foreach (var value in ModelState.Values)
-                {
-                    foreach (var error in value.Errors)
-                    {
-                        errors.Add(error.ErrorMessage);
-                    }
-                }
-                string errorMessage = string.Join("\n", errors);
-                return BadRequest(errorMessage);
-            }
-            return View(brand);
-        }
+				// Tìm brand cũ theo ID và cập nhật dữ liệu
+				var brandToUpdate = await _dataContext.Brands.FindAsync(brand.Id);
 
-    }
+				if (brandToUpdate == null)
+				{
+					TempData["error"] = "Không tìm thấy thương hiệu";
+					return RedirectToAction("Index");
+				}
+
+				// Cập nhật dữ liệu cho brand cũ
+				brandToUpdate.Name = brand.Name;
+				brandToUpdate.Slug = brand.Slug;
+				brandToUpdate.Description = brand.Description;
+				brandToUpdate.Status = brand.Status;
+
+				// Lưu thay đổi vào CSDL
+				_dataContext.Update(brandToUpdate);
+				await _dataContext.SaveChangesAsync();
+				TempData["success"] = "Cập nhật thương hiệu thành công";
+				return RedirectToAction("Index");
+			}
+			else
+			{
+				TempData["error"] = "Model có 1 vài thứ đang bị lỗi";
+				List<string> errors = new List<string>();
+				foreach (var value in ModelState.Values)
+				{
+					foreach (var error in value.Errors)
+					{
+						errors.Add(error.ErrorMessage);
+					}
+				}
+				string errorMessage = string.Join("\n", errors);
+				return BadRequest(errorMessage);
+			}
+			return View(brand);
+		}
+
+	}
 }

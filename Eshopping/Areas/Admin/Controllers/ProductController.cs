@@ -157,27 +157,33 @@ namespace Eshopping.Areas.Admin.Controllers
                     string uploadsDir = Path.Combine(_webHostEnvironment.WebRootPath, "media/products");
                     string imageName = Guid.NewGuid().ToString() + "_" + product.ImageUpload.FileName;
                     string filePath = Path.Combine(uploadsDir, imageName);
-
-                    //cập nhật và xóa ảnh sp cũ: tức là khi muốn cập nhật bức ảnh mới ta sẽ xóa ảnh cũ đi và thay mới 
-                    string oldfilePath = Path.Combine(uploadsDir, exitsted_product.Image);
-                    try
-                    {
-                        //khi ta đã thay bức ảnh mới nó sẽ ktra và xóa ảnh cũ khỏi csdl 
-                        if (System.IO.File.Exists(oldfilePath))
+                    // Kiểm tra nếu sản phẩm đã có ảnh cũ
+                    if (!string.IsNullOrEmpty(exitsted_product.Image))  //ktra nếu CSDL chưa có bức ảnh cũ => cột Image đang null .do  Path.Combine ko đc chứa gtri null nên ta phải ktra trc 
+					{
+                        //cập nhật và xóa ảnh sp cũ: tức là khi muốn cập nhật bức ảnh mới ta sẽ xóa ảnh cũ đi và thay mới 
+                        string oldfilePath = Path.Combine(uploadsDir, exitsted_product.Image);
+                        try
                         {
-                            System.IO.File.Delete(oldfilePath);
+                            //khi ta đã thay bức ảnh mới nó sẽ ktra và xóa ảnh cũ khỏi csdl 
+                            if (System.IO.File.Exists(oldfilePath))
+                            {
+                                System.IO.File.Delete(oldfilePath);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            ModelState.AddModelError("", "Lỗi khi xóa ảnh sản phẩm ");
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        ModelState.AddModelError("", "Lỗi khi xóa ảnh sản phẩm ");
-                    }
-                    FileStream fs = new FileStream(filePath, FileMode.Create);
-                    await product.ImageUpload.CopyToAsync(fs);
-                    fs.Close();
-                    exitsted_product.Image = imageName;
+					// Lưu ảnh mới:Sử dụng using cho FileStream: Đảm bảo FileStream được đóng tự động sau khi ghi file bằng cách sử dụng using.
+					using (var fs = new FileStream(filePath, FileMode.Create))
+					{
+						await product.ImageUpload.CopyToAsync(fs);
+					}
+					
+                        exitsted_product.Image = imageName;
 
-
+                    
                 }
                 //update other product properties: VD ta chỉ muốn thay đổi 1 trong các thuộc tính của sp thôi, ta sẽ chỉ thay đổi những thuộc tính t/ứng đc truyền vào 
                 //cái hay ở đây: khi ta ko thay đổi ảnh thì nó vẫn giữ nguyên cái ảnh cũ, ko bị xóa mất 
