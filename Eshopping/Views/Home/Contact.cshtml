@@ -1,19 +1,72 @@
 ﻿
 @model ContactModel
 
-<h2>Thông tin liên hệ shop làm web bán hàng đáng yêu.</h2>
-<div class="row">
-    <div class="col-sm-5 col-md-5">
-        @Html.Raw(@Model.Map)
-        @Html.Raw(@Model.Description)
-        
-    </div>
-    <div class="col-sm-4">
-        <div class="address">
-            <h5>Name: @Model.Name</h5>
-            <h5>Email: @Model.Email</h5>
-            <h5>Phone: @Model.Phone</h5>
+<h2 style="font-weight:bold; font-size:36px;">Thông tin liên hệ shop làm web bán hàng đáng yêu.</h2>
+<div class="row" >
+    <!-- First student -->
+    <div class="col-md-6 d-flex mb-4" style="margin-bottom:100px; ">
+        <div class="me-3" style="display:flex;">
+            <img src="~/media/logo/TRUONGQUANGVINH.jpg" style="width:250px; margin-right:50px; " class="img-fluid" alt="Student 1">
+            <div>
+                <p><strong>Họ tên:</strong> Trương Quang Vinh</p>
+                <p><strong>Mã sinh viên:</strong> 221231053</p>
+                <p><strong>Điện thoại:</strong> </p>
+            </div>
         </div>
+    </div>
+    <!-- Second student -->
+    <div class="col-md-6 d-flex mb-4" style="margin-bottom:100px;">
+        <div class="me-3" style="display:flex;">
+            <img src="~/media/logo/TRANHAIDANG.jpg" style="width:250px;margin-right:50px; " class="img-fluid" alt="Student 2">
+            <div>
+                <p><strong>Họ tên:</strong> Trần Hải Đăng</p>
+                <p><strong>Mã sinh viên:</strong> 221230799</p>
+                <p><strong>Điện thoại:</strong> </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- clearfix to ensure next row starts correctly -->
+    <div class="w-100"></div>
+
+    <!-- Third student -->
+    <div class="col-md-6 d-flex mb-4" style="margin-bottom:100px;">
+        <div class="me-3" style="display:flex;">
+            <img src="~/media/logo/NGUYENPHANHAI.jpg" style="width:250px;margin-right:50px; " class="img-fluid" alt="Student 3">
+            <div>
+                <p><strong>Họ tên:</strong> Nguyễn Phan Hải</p>
+                <p><strong>Mã sinh viên:</strong> 221230823</p>
+                <p><strong>Điện thoại:</strong> </p>
+            </div>
+        </div>
+    </div>
+    <!-- Fourth student -->
+    <div class="col-md-6 d-flex mb-4" style="margin-bottom:100px;">
+        <div class="me-3" style="display:flex;">
+            <img src="~/media/logo/DINGNGOCTHE.jpg" style="width:250px;margin-right:50px; " class="img-fluid" alt="Student 4">
+            <div>
+                <p><strong>Họ tên:</strong> Đinh Ngọc Thế</p>
+                <p><strong>Mã sinh viên:</strong> 221230999</p>
+                <p><strong>Điện thoại:</strong> </p>
+            </div>
+        </div>
+    </div>
+
+   
+</div>
+    <!-- Fifth student (aligned to the left) -->
+    <div class="col-md-6 d-flex mb-4" style="margin-bottom:100px; ">
+        <div class="me-3" style="display:flex;">
+            <img src="~/media/logo/LUONGVANSON.jpg" style="width:250px;margin-right:50px; " class="img-fluid" alt="Student 5">
+            <div>
+                <p><strong>Họ tên:</strong> Lường Văn Sơn</p>
+                <p><strong>Mã sinh viên:</strong> 221230974</p>
+                <p><strong>Điện thoại:</strong> </p>
+            </div>
+        </div>
+    </div>
+
+
         @* vào trang https://developers.facebook.com/docs/plugins/page-plugin/ để đọc hướng dẫn cách tạo 1 fanpage và nhúng vào trang web  *@
     </div>
     <div class="col-sm-4">

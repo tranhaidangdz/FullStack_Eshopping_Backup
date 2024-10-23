@@ -118,7 +118,7 @@
 								<td>
 									@if (Model.ShippingCost <= 0)
 									{
-										<a disable="disabled" class="btn btn-primary btn-sm" asp-controller="Checkout" asp-action="Checkout"> Đặt hàng </a> //nếu gía ship<=0 ta ko cho đặt hàng, ta dùng disable để ẩn nút đặt hàng đi ko cho ng dùng nhấn vào 
+										<a disable="disabled" onclick="return confirm('Xác nhận đặt hàng?')" class="btn btn-primary btn-sm" asp-controller="Checkout" asp-action="Checkout"> Đặt hàng </a> //nếu gía ship<=0 ta ko cho đặt hàng, ta dùng disable để ẩn nút đặt hàng đi ko cho ng dùng nhấn vào 
 										<br />
 										<span class="text text-danger">Hãy bấm tính phí vận chuyển trước khi đặt hàng</span>
 									}

@@ -51,7 +51,7 @@
                     @* ta ktra nếu trạng thái đơn hàng ở trên != 3 => ta mới hiển thị nút cho ngta hủy, còn ==3 (đơn hàng đã hủy) ; thì ta ẩn nút Cancel Order đi luôn k *@
                     @if (item.Status != 3)
                     {
-                        <a asp-action="CancelOrder" class="btn btn-danger btn-sm" asp-controller="Account" asp-route-ordercode="@item.OrderCode">Cancel Order</a>
+                        <a asp-action="CancelOrder" onclick="return confirm('Xác nhận hủy đặt hàng?')" class="btn btn-danger btn-sm" asp-controller="Account" asp-route-ordercode="@item.OrderCode">Cancel Order</a>
                     }
                 </td>
             </tr>

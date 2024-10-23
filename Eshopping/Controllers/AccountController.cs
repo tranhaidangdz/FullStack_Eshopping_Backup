@@ -47,7 +47,7 @@ namespace Eshopping.Controllers
 			else
 			{
 				TempData["error"] = "Email không tìm thấy hoặc  token không đúng !";
-				return RedirectToAction("Forgot Pass", "Account");
+				return RedirectToAction("ForgetPass", "Account");
 			}
 			return View();
 		}
@@ -89,6 +89,38 @@ namespace Eshopping.Controllers
 			return RedirectToAction("ForgetPass", "Account");
 		}
 
+		//CẬP NHẬT MK MỚI:
+		[HttpPost]
+		public async Task<IActionResult> UpdateNewPassword(AppUserModel user, string token)
+		{
+
+			//tìm user dựa vào email và token của user đó 
+			var checkuser = await _userManage.Users
+			.FirstOrDefaultAsync(u => u.Email.Trim() == user.Email.Trim() && u.Token.Trim() == token.Trim());
+
+			if (checkuser != null)
+			{
+				//update user with new password and token
+				string newtoken = Guid.NewGuid().ToString();
+				// Hash the new password:mã hóa mk mới trc khi thêm vào CSDL 
+				var passwordHasher = new PasswordHasher<AppUserModel>();
+				var passwordHash = passwordHasher.HashPassword(checkuser, user.PasswordHash);
+
+				checkuser.PasswordHash = passwordHash;   //thêm mk sau khi hash cho user 
+				checkuser.Token = newtoken;  //tạo mới 1 token 
+				await _userManage.UpdateAsync(checkuser);
+				TempData["success"] = "Cập nhật mật khẩu mới thành công !";
+				return RedirectToAction("Login", "Account");
+
+			}
+			else
+			{
+				TempData["error"] = "Không tìm thấy email hoặc token không đúng! ";
+				return RedirectToAction("ForgetPass", "Account");
+			}
+			return View();
+		}
+
 		[HttpPost]
 		//[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Login(LoginViewModel loginVM)
@@ -101,7 +133,7 @@ namespace Eshopping.Controllers
 					return Redirect(loginVM.ReturnUrl ?? "/"); // ??: nếu không cái trước thì cái sau
 				}
 
-				ModelState.AddModelError("", "Invalid username or password");
+				ModelState.AddModelError("", "Tên đăng nhập và mật khẩu không hợp lệ!");
 			}
 			return View(loginVM);
 		}
