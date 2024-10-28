@@ -13,13 +13,15 @@
 					<h2>Reset a new Password</h2>
 					<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 					<form asp-action="UpdateNewPassword" asp-controller="Account">
+						<input type="hidden" name="token" value="@ViewBag.Token" />
+						<input type="hidden" name="Email" value="@ViewBag.Email" />
 
 						<div class="form-group">
 							<label>Email</label>
 							<input asp-for="Email" readonly value="@ViewBag.Email" class="form-control" />
 							<span asp-validation-for="Email" class="text-danger"></span>
 						</div>
-						
+
 						<div class="form-group">
 							<label>Password</label>
 							<input asp-for="PasswordHash" class="form-control" />
@@ -27,9 +29,8 @@
 						</div>
 
 						<button class="btn btn-default">Gửi</button>
-						<a asp-action="Create" asp-controller="Account">Tạo tài khoản mới</a> <br />
-
 					</form>
+
 				</div>
 				<!--/login form-- >
 							</div>

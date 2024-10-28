@@ -3,12 +3,14 @@ using Eshopping.Models;
 using Eshopping.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 //connet database
 builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlServer(builder.Configuration["ConnectionStrings:ConnectedDb"]);
+	options.EnableSensitiveDataLogging(); // Enables detailed logging for debugging
 }
 );
 //
@@ -35,6 +37,7 @@ builder.Services.AddIdentity<AppUserModel, IdentityRole>()
 
 //thừa
 builder.Services.AddAuthentication();
+
 builder.Services.Configure<IdentityOptions>(options =>
 {
 	// Password settings:yêu cầu mk khi đăng nhập :mk phải chứa số, chữ thường, ký tự đặc biệt ...

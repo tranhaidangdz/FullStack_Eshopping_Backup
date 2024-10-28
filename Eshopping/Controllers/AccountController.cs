@@ -32,25 +32,25 @@ namespace Eshopping.Controllers
 		}
 		//trả về view quên mật khẩu TK 
 
-		public async Task<IActionResult> NewPass(AppUserModel user, string token)
+		public async Task<IActionResult> NewPass(string email, string token)
 		{
-			//ta ktra xem email của user yêu cầu đổi mk có giống vs email yêu cầu ko 
 			var checkuser = await _userManage.Users
-			.Where(u => u.Email == user.Email)
-			.Where(u => u.Token == user.Token).FirstOrDefaultAsync();  //FirstOrDefaultAsync(); lấy ra dòng đầu tiên của dữ liệu thôi 
-																	   //lấy thông tin email và đoạn token 
+				.FirstOrDefaultAsync(u => u.Email == email && u.Token == token);
+
 			if (checkuser != null)
 			{
 				ViewBag.Email = checkuser.Email;
-				ViewBag.Token = token;
+				ViewBag.Token = token; // Pass this to ViewBag for use in the form
+				return View();
 			}
 			else
 			{
-				TempData["error"] = "Email không tìm thấy hoặc  token không đúng !";
+				TempData["error"] = "Email không tìm thấy hoặc token không đúng!";
 				return RedirectToAction("ForgetPass", "Account");
 			}
-			return View();
 		}
+
+
 		//trả về view tạo mk mới   
 		public async Task<IActionResult> ForgetPass(string returnUrl)
 		{
@@ -90,36 +90,38 @@ namespace Eshopping.Controllers
 		}
 
 		//CẬP NHẬT MK MỚI:
+		// Process the new password update
 		[HttpPost]
 		public async Task<IActionResult> UpdateNewPassword(AppUserModel user, string token)
 		{
+			if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(user.Email))
+			{
+				TempData["error"] = "Token hoặc Email không hợp lệ!";
+				return RedirectToAction("ForgetPass", "Account");
+			}
 
-			//tìm user dựa vào email và token của user đó 
 			var checkuser = await _userManage.Users
-			.FirstOrDefaultAsync(u => u.Email.Trim() == user.Email.Trim() && u.Token.Trim() == token.Trim());
+				.FirstOrDefaultAsync(u => u.Email.Trim() == user.Email.Trim() && u.Token.Trim() == token.Trim());
 
 			if (checkuser != null)
 			{
-				//update user with new password and token
 				string newtoken = Guid.NewGuid().ToString();
-				// Hash the new password:mã hóa mk mới trc khi thêm vào CSDL 
 				var passwordHasher = new PasswordHasher<AppUserModel>();
 				var passwordHash = passwordHasher.HashPassword(checkuser, user.PasswordHash);
-
-				checkuser.PasswordHash = passwordHash;   //thêm mk sau khi hash cho user 
-				checkuser.Token = newtoken;  //tạo mới 1 token 
+				checkuser.PasswordHash = passwordHash;
+				checkuser.Token = newtoken;
 				await _userManage.UpdateAsync(checkuser);
-				TempData["success"] = "Cập nhật mật khẩu mới thành công !";
-				return RedirectToAction("Login", "Account");
 
+				TempData["success"] = "Cập nhật mật khẩu mới thành công!";
+				return RedirectToAction("Login", "Account");
 			}
 			else
 			{
-				TempData["error"] = "Không tìm thấy email hoặc token không đúng! ";
+				TempData["error"] = "Không tìm thấy email hoặc token không đúng!";
 				return RedirectToAction("ForgetPass", "Account");
 			}
-			return View();
 		}
+
 
 		[HttpPost]
 		//[ValidateAntiForgeryToken]
