@@ -13,14 +13,23 @@ namespace Eshopping.Controllers
             _dataContext = context;
         }
 
-		public async Task<IActionResult> Index(String Slug = "")
+		public async Task<IActionResult> Index(string Slug = "", string sort_by = "", string startprice = "", string endprice = "")
 		{
-			BrandModel brand = _dataContext.Brands.Where(c => c.Slug == Slug).FirstOrDefault();
-			//neu brand ko co se tra ve trang index trong view 
+			// Tìm thương hiệu dựa trên Slug
+			BrandModel brand = _dataContext.Brands.FirstOrDefault(c => c.Slug == Slug);
+
+			// Nếu không tìm thấy thương hiệu, trả về trang BrandNotFound
 			if (brand == null)
-				return RedirectToAction("Index");
-			var productsByBrand = _dataContext.Products.Where(p => p.CategoryId == brand.Id);
-			return View(await productsByBrand.OrderByDescending(p => p.Id).ToListAsync());
+				return View("BrandNotFound"); // Đảm bảo View này tồn tại trong thư mục Views/Brand hoặc Shared
+
+			// Tìm danh sách sản phẩm dựa trên BrandId
+			var productsByBrand = _dataContext.Products.Where(p => p.BrandId == brand.Id);
+
+			// Trả về View Index với danh sách sản phẩm
+			return View(await productsByBrand.ToListAsync());
 		}
+
+
+
 	}
 }
