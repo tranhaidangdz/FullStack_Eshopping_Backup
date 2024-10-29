@@ -199,7 +199,7 @@ namespace Eshopping.Controllers
 
 					// Thêm role mặc định cho user vừa tạo
 					var createUser = await _userManage.FindByEmailAsync(user.Email);
-					var role = _roleManager.FindByNameAsync("Viewer");
+					var role = _roleManager.FindByNameAsync("User");
 
 					// Gan role cho user vua tao
 					var addToRoleResult = await _userManage.AddToRoleAsync(createUser, role.Result.Name);
