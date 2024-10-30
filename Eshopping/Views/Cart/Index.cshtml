@@ -1,10 +1,10 @@
-﻿@using Eshopping.Models.ViewModels
+﻿﻿@using Eshopping.Models.ViewModels
 @model CartItemViewModel
 
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-<h4>Giỏ hàng</h4>
+<h4>Cart</h4>
 <style type="text/css">
 	.css_select_div {
 		text-align: center;
@@ -58,15 +58,15 @@
 									<p>@item.Price.ToString("#,##0 VNĐ")</p>
 								</td>
 								<td class="cart_quantity">
-									
-										<a class="btn btn-success btn-sm" asp-controller="Cart" asp-action="Increase" asp-route-id="@item.ProductId"> + </a>
-										<input class="cart_quantity_input" type="text" name="quantity" value="@item.Quantity" autocomplete="off" size="2">
-										<a class="btn btn-success btn-sm" asp-controller="Cart" asp-action="Decrease" asp-route-id="@item.ProductId"> - </a>
-										<a class="btn btn-danger btn-sm" asp-controller="Cart" asp-action="Remove" asp-route-id="@item.ProductId"> Remove </a>
-									
+
+									<a class="btn btn-success btn-sm" asp-controller="Cart" asp-action="Increase" asp-route-id="@item.ProductId"> + </a>
+									<input class="cart_quantity_input" type="text" name="quantity" value="@item.Quantity" autocomplete="off" size="2">
+									<a class="btn btn-success btn-sm" asp-controller="Cart" asp-action="Decrease" asp-route-id="@item.ProductId"> - </a>
+									<a class="btn btn-danger btn-sm" asp-controller="Cart" asp-action="Remove" asp-route-id="@item.ProductId"> Remove </a>
+
 								</td>
 								<td class="cart_total">
-									<p class="cart_total_price">$@Model.CartItems.Where(x=>x.ProductId==@item.ProductId).Sum(x=>x.Quantity*x.Price).ToString()</p>
+									<p class="cart_total_price">$@Model.CartItems.Where(x => x.ProductId == @item.ProductId).Sum(x => x.Quantity * x.Price).ToString()</p>
 								</td>
 								<td class="cart_delete">
 									<a class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
@@ -75,63 +75,65 @@
 						}
 						<tr>
 							<td rowspan="10">
-							Grand Total:<p class="cart_total_price"> @Model.GrandTotal.ToString("#,##0 VNĐ")</p>
-							<form>
+								Grand Total:<p class="cart_total_price"> @Model.GrandTotal.ToString("#,##0 VNĐ")</p>
+								<form>
 
-							Coupon Code:<input type="text" class="form-control coupon-value" />
-							<span class="text text-success">@Model.CouponCode</span>
-							<input type="button" value="Apply" class="btn btn-sm btn-primary btn-apply-coupon"/>
-							</form>
-							Shipping Cost:<p class="cart_total_price"> @Model.ShippingCost.ToString("#,##0 VNĐ")</p>
+									Coupon Code:<input type="text" class="form-control coupon-value" />
+									<span class="text text-success">@Model.CouponCode</span>
+									<input type="button" value="Apply" class="btn btn-sm btn-primary btn-apply-coupon" />
+								</form>
+								Shipping Cost:<p class="cart_total_price"> @Model.ShippingCost.ToString("#,##0 VNĐ")</p>
 
-								<p>	<a asp-action="RemoveShippingCookie" asp-controller="Cart">Xóa Shipping</a> </p>
-							
-						</td>
+								<p>	<a asp-action="RemoveShippingCookie" asp-controller="Cart">Delete Shipping</a> </p>
+
+							</td>
 							<td rowspan="20">
 								<div class="form-group">
-									<label>Chọn</label>
+									<label>Select Province</label>
 									<select class="css_select" id="tinh" name="tinh" title="Chọn Tỉnh Thành">
 										<option value="0">Tỉnh Thành</option>
 									</select>
 								</div>
 
 								<div class="form-group">
-									<label>Chọn</label>
+									<label>Select District</label>
 									<select class="css_select" id="quan" name="quan" title="Chọn Quận Huyện">
 										<option value="0">Quận Huyện</option>
 									</select>
 								</div>
 
 								<div class="form-group">
-									<label>Chọn</label>
+									<label>Select Commune</label>
 									<select class="css_select" id="phuong" name="phuong" title="Chọn Phường Xã">
 										<option value="0">Phường Xã</option>
 									</select>
 								</div>
 
-								<button type="button" class="btn btn-default btn-add-shipping">Tính phí ship</button>
+								<button type="button" class="btn btn-default btn-add-shipping">Calculate shipping fees</button>
 							</td>
-							
+
 							<td><a class="btn btn-danger btn-sm" asp-controller="Cart" asp-action="ClearCart"> clear </a></td>
-							@if(User.Identity?.IsAuthenticated ?? false)  //ktra nếu ng dùng đã đăng nhập thì mới đc đặt hàng 
+							@if (User.Identity?.IsAuthenticated ?? false)  //ktra nếu ng dùng đã đăng nhập thì mới đc Checkout
 							{
 								<td>
 									@if (Model.ShippingCost <= 0)
 									{
-										<a disable="disabled" onclick="return confirm('Xác nhận đặt hàng?')" class="btn btn-primary btn-sm" asp-controller="Checkout" asp-action="Checkout"> Đặt hàng </a> //nếu gía ship<=0 ta ko cho đặt hàng, ta dùng disable để ẩn nút đặt hàng đi ko cho ng dùng nhấn vào 
+										<a disable="disabled" onclick="return confirm('Confirm checkout?')" class="btn btn-primary btn-sm" asp-controller="Checkout" asp-action="Checkout"> Checkout </a>
+						//nếu gía ship<=0 ta ko cho Checkout, ta dùng disable để ẩn nút Checkout đi ko cho ng dùng nhấn vào
 										<br />
-										<span class="text text-danger">Hãy bấm tính phí vận chuyển trước khi đặt hàng</span>
+										<span class="text text-danger">Please click calculate shipping before Checkout</span>
 									}
 									else
 									{
-										<a class="btn btn-primary btn-sm" asp-controller="Checkout" asp-action="Checkout"> Đặt hàng </a>
-										
+										<a class="btn btn-primary btn-sm" asp-controller="Checkout" asp-action="Checkout"> Checkout </a>
+
 									}
 								</td>
 							}
-							
+
 						</tr>
-					}else
+					}
+					else
 					{
 						<tr>
 							<td colspan="5"><h4>Your Cart is Empty</h4></td>
@@ -142,13 +144,12 @@
 		</div>
 	</div>
 </section> <!--/#cart_items-->
-
 @section Scripts
 {
 	@* khi người dùng ấn nút thêm coupon: *@
 	<script>
 		$(".btn-apply-coupon").click(function () {
-			var coupon_value= $(".coupon-value").val();
+			var coupon_value = $(".coupon-value").val();
 			//alert(coupon_value);
 			$.ajax({
 				type: "POST",
@@ -158,7 +159,7 @@
 					if (result.success) {
 						Swal.fire(result.message).then(() => {
 							setTimeout(function () {
-								location.reload();  //Bạn đang gọi location.reload() khi ajax thành công. 
+								location.reload();  //Bạn đang gọi location.reload() khi ajax thành công.
 								//Điều này sẽ tải lại toàn bộ trang sau khi áp dụng coupon, nhưng trước khi nó tải lại,
 								//  SweetAlert có thể không hiển thị do trang đã được reload. Để hiển thị thông báo trước khi tải lại trang, bạn có thể thêm một thời gian chờ bằng setTimeout
 							}, 1500); // Đợi 1.5 giây trước khi tải lại trang
@@ -182,7 +183,7 @@
 			var price = $("#price-shipping").val();
 
 			if (tinh == '' || quan == '' || phuong == '' || price == '') {
-				Swal.fire("không được bỏ trống");
+				Swal.fire("Don't left blank");
 			} else {
 				$.ajax({
 					type: "POST",
@@ -191,8 +192,8 @@
 
 					success: function (result) {
 						//successful
-						if (result) 
-						
+						if (result)
+
 							location.reload();  //sau khi gửi dữ liệu thì xóa tỉnh thành phố cũ vừa chọn
 
 					}

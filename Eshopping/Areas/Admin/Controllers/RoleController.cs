@@ -71,7 +71,7 @@ namespace Eshopping.Areas.Admin.Controllers
             try
             {
                 await _roleManager.UpdateAsync(role);
-                TempData["success"] = "Cập nhật role thành công!";
+                TempData["success"] = "Role updated successfully!";
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
@@ -113,7 +113,7 @@ namespace Eshopping.Areas.Admin.Controllers
             try
             {
                 await _roleManager.DeleteAsync(role);
-                TempData["success"] = "Xóa role thành công!";
+                TempData["success"] = "Role deleted successfully!";
             }
             catch (Exception ex)
             {

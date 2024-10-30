@@ -76,7 +76,7 @@ namespace Eshopping.Areas.Admin.Controllers
 
                 if (slug != null)
                 {
-                    ModelState.AddModelError("", "Sản phẩm này đã có trong Database");
+                    ModelState.AddModelError("", "This product is already in the Database");
                     return View(product);
                 }
 
@@ -94,13 +94,13 @@ namespace Eshopping.Areas.Admin.Controllers
 
                 _dataContext.Add(product);
                 await _dataContext.SaveChangesAsync();
-                TempData["success"] = "Thêm sản phẩm thành công";
+                TempData["success"] = "Added product successfully!";
                 return RedirectToAction("Index");
 
             }
             else
             {
-                TempData["error"] = "Model có 1 vài thứ đang bị lỗi";
+                TempData["error"] = "The model has a few things that are wrong!";
                 List<string> errors = new List<string>();
                 foreach (var value in ModelState.Values)
                 {
@@ -141,7 +141,7 @@ namespace Eshopping.Areas.Admin.Controllers
 			var exitsted_product = _dataContext.Products.Find(product.Id); // sử dụng FindAsync:tìm sp theo ID 
 			if (exitsted_product == null)
 			{
-				TempData["error"] = "Sản phẩm không tồn tại.";
+				TempData["error"] = "\r\nProduct does not exist!";
 				return RedirectToAction("Index");
 			}
 			if (ModelState.IsValid)
@@ -172,7 +172,7 @@ namespace Eshopping.Areas.Admin.Controllers
                         }
                         catch (Exception ex)
                         {
-                            ModelState.AddModelError("", "Lỗi khi xóa ảnh sản phẩm ");
+                            ModelState.AddModelError("", "Error deleting product image! ");
                         }
                     }
 					// Lưu ảnh mới:Sử dụng using cho FileStream: Đảm bảo FileStream được đóng tự động sau khi ghi file bằng cách sử dụng using.
@@ -197,13 +197,13 @@ namespace Eshopping.Areas.Admin.Controllers
                 _dataContext.Update(exitsted_product);
 
                 await _dataContext.SaveChangesAsync();
-                TempData["success"] = "Cập nhật sản phẩm thành công";
+                TempData["success"] = "Product update successful!";
                 return RedirectToAction("Index");
 
             }
             else
             {
-                TempData["error"] = "Model có 1 vài thứ đang bị lỗi";
+                TempData["error"] = "The model has a few things that are wrong";
                 List<string> errors = new List<string>();
                 foreach (var value in ModelState.Values)
                 {
@@ -233,7 +233,7 @@ namespace Eshopping.Areas.Admin.Controllers
             }
             _dataContext.Products.Remove(product);
             await _dataContext.SaveChangesAsync();
-            TempData["error"] = "Sản phẩm đã xóa";
+            TempData["error"] = "Product deleted";
             return RedirectToAction("Index");
         }
 
@@ -271,7 +271,7 @@ namespace Eshopping.Areas.Admin.Controllers
             _dataContext.Add(productQuantityModel);
             _dataContext.SaveChangesAsync();
 
-            TempData["success"] = "Thêm số lượng sản phẩm thành công";
+            TempData["success"] = "Add product quantity successfully!";
             return RedirectToAction("AddQuantity", "Product", new { Id = productQuantityModel.ProductId });
 
 

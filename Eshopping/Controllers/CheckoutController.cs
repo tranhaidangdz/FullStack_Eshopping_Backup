@@ -74,7 +74,7 @@ namespace Eshopping.Controllers
 					var product = await _dataContext.Products.Where(p => p.Id == cart.ProductId).FirstOrDefaultAsync();
 					if (product == null)
 					{
-						TempData["error"] = "Sản phẩm không tồn tại trong hệ thống";
+						TempData["error"] = "The product does not exist in the system";
 						return RedirectToAction("Index", "Cart");
 					}
 
@@ -90,12 +90,12 @@ namespace Eshopping.Controllers
 				HttpContext.Session.Remove("Cart");
 				//sau khi đặt hàng và bấm checkout , ta sẽ xóa đi đơn hàng đã đặt và gửi mail cho khách hàng bằng cái email trandang ở file Emailseder 
 				var receiver = userEmail;  //email nhận, nó đc gửi đi từ email trandang211, sau này ta sẽ thay email nhận này = email ng dùng nhập vào 
-				var subject = "Đặt hàng thành công";  //tiêu đề
-				var message = "Đặt hàng thành công, trải nghiệm dịch vụ nhé ";  //ND thông báo khi chạy ctrinh, nó gửi mail với ND này cho ng đã mua hàng 
+				var subject = "Order successful";  //tiêu đề
+				var message = "Order successfully, experience the service ";  //ND thông báo khi chạy ctrinh, nó gửi mail với ND này cho ng đã mua hàng 
 
 				await _emailSender.SendEmailAsync(receiver, subject, message);
 
-				TempData["success"] = "Checkout thành công, vui lòng chờ đơn hàng được duyệt";
+				TempData["success"] = "Checkout successful, please wait for the order to be approved";
                 //return View("History", "Account"); // trả về view từ một controller khác, bạn cần sử dụng phương thức RedirectToAction
                 return RedirectToAction("History", "Account");
 

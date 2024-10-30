@@ -75,19 +75,19 @@ namespace Eshopping.Areas.Admin.Controllers
 
                 if (slug != null)
                 {
-                    ModelState.AddModelError("", "Danh mục này đã có trong Database");
+                    ModelState.AddModelError("", "This category is already in the Database");
                     return View(category);
                 }
 
                 _dataContext.Add(category);
                 await _dataContext.SaveChangesAsync();
-                TempData["success"] = "Thêm danh mục thành công";
+                TempData["success"] = "Added category successfully";
                 return RedirectToAction("Index");
 
             }
             else
             {
-                TempData["error"] = "Model có 1 vài thứ đang bị lỗi";
+                TempData["error"] = "The model has a few things that are wrong";
                 List<string> errors = new List<string>();
                 foreach (var value in ModelState.Values)
                 {
@@ -116,19 +116,19 @@ namespace Eshopping.Areas.Admin.Controllers
 
                 if (slug != null)
                 {
-                    ModelState.AddModelError("", "Danh mục này đã có trong Database");
+                    ModelState.AddModelError("", "This category is already in the Database");
                     return View(category);
                 }
 
                 _dataContext.Update(category);
                 await _dataContext.SaveChangesAsync();
-                TempData["success"] = "Cập nhật danh mục thành công";
+                TempData["success"] = "Updated category successfully";
                 return RedirectToAction("Index");
 
             }
             else
             {
-                TempData["error"] = "Model có 1 vài thứ đang bị lỗi";
+                TempData["error"] = "The model has a few things that are wrong";
                 List<string> errors = new List<string>();
                 foreach (var value in ModelState.Values)
                 {
@@ -150,7 +150,7 @@ namespace Eshopping.Areas.Admin.Controllers
             _dataContext.Categories.Remove(category);
             //sau khi xóa đi category ta phải gọi hàm save change thì nó mới lưu sự thay đổi CSDL
             await _dataContext.SaveChangesAsync();
-            TempData["success"] = "Danh mục đã xóa";
+            TempData["success"] = "Category has been deleted";
             return RedirectToAction("Index");
         }
     }

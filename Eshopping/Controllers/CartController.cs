@@ -22,9 +22,9 @@ namespace Eshopping.Controllers
 			var shippingPriceCookie = Request.Cookies["ShippingPrice"];
 			decimal shippingPrice = 0;
 
-            //nhận mã giảm giá từ cookie : 
-            var coupon_code = Request.Cookies["CouponTitle"];
-            if (shippingPriceCookie != null)
+			//nhận mã giảm giá từ cookie : 
+			var coupon_code = Request.Cookies["CouponTitle"];
+			if (shippingPriceCookie != null)
 			{
 				var shippingPriceJson = shippingPriceCookie;
 				shippingPrice = JsonConvert.DeserializeObject<decimal>(shippingPriceJson);  //đổi lại về kiểu decimal: giá tiền ban đầu 
@@ -36,7 +36,7 @@ namespace Eshopping.Controllers
 				CartItems = cartItems,
 				GrandTotal = cartItems.Sum(x => x.Quantity * x.Price),
 				ShippingCost = shippingPrice,
-				CouponCode=coupon_code
+				CouponCode = coupon_code
 			};
 			return View(cartVM);
 		}
@@ -106,12 +106,12 @@ namespace Eshopping.Controllers
 			if (cartItem.Quantity >= 1 && product.Quantity > cartItem.Quantity)
 			{
 				++cartItem.Quantity;  //nếu bấm vào nút có class decrease ta ktra số lg , nếu >1 thì tang  số lg sp đi 
-				TempData["success"] = "Tăng số lượng sản phẩm thành công";
+				TempData["success"] = "Increase the number of successful products";
 			}
 			else
 			{
 				cartItem.Quantity = product.Quantity;
-				TempData["error"] = "Số lượng sản phẩm đã đạt tối đa";
+				TempData["error"] = "The number of products has reached the maximum";
 			}
 
 			if (cart.Count == 0)
@@ -192,7 +192,7 @@ namespace Eshopping.Controllers
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine($"Lỗi khi thêm giá vận chuyển vào cookie: {ex.Message}");
+				Console.WriteLine($"Error adding shipping price to cookie: {ex.Message}");
 			}
 			return Json(new { shippingPrice });
 		}
@@ -218,7 +218,7 @@ namespace Eshopping.Controllers
 			// Nếu không tìm thấy mã giảm giá, trả về thông báo lỗi
 			if (validCoupon == null)
 			{
-				return Ok(new { success = false, message = "Mã giảm giá không tồn tại" });
+				return Ok(new { success = false, message = "Discount code does not exist" });
 			}
 
 			// Nếu mã giảm giá tồn tại, lấy tên và mô tả
@@ -240,24 +240,24 @@ namespace Eshopping.Controllers
 							SameSite = SameSiteMode.Strict // Kiểm tra tính tương thích trình duyệt
 						};
 						Response.Cookies.Append("CouponTitle", couponTitle, cookieOptions);
-						return Ok(new { success = true, message = "Thêm mã giảm giá thành công" });
+						return Ok(new { success = true, message = "Add discount code successfully" });
 
 					}
 					catch (Exception ex)
 					{
 						//tra ve loi:
-						Console.WriteLine($"Lỗi khi thêm mã giảm giá:{ex.Message}");
-						return Ok(new { success = false, message = "Mã bị lỗi " });
+						Console.WriteLine($"Error when adding discount code:{ex.Message}");
+						return Ok(new { success = false, message = "Coupon error " });
 					}
 				}
 				else
 				{
-					return Ok(new { success = false, message = "Mã đã hết hạn" });
+					return Ok(new { success = false, message = "Coupon has expired" });
 				}
 			}
 			else  //nếu couponTitle ==null 
 			{
-				return Ok(new { success = false, message = "Mã giảm giá không tồn tại" });
+				return Ok(new { success = false, message = "Discount code does not exist" });
 			}
 			//return Json(new { success = true, message = "Coupon applied successfully!" });
 

@@ -65,7 +65,7 @@ namespace Eshopping.Areas.Admin.Controllers
 					}
 					catch (Exception ex)
 					{
-						ModelState.AddModelError("", "Lỗi khi xóa ảnh sản phẩm ");
+						ModelState.AddModelError("", "Error deleting Contact image");
 					}
 
 					FileStream fs = new FileStream(filePath, FileMode.Create);
@@ -85,13 +85,13 @@ namespace Eshopping.Areas.Admin.Controllers
 				_dataContext.Update(exitsted_contact);
 
 				await _dataContext.SaveChangesAsync();
-				TempData["success"] = "Cập nhật thông tin web thành công";
+				TempData["success"] = "Updated web information successfully";
 				return RedirectToAction("Index");
 
 			}
 			else
 			{
-				TempData["error"] = "Model có 1 vài thứ đang bị lỗi";
+				TempData["error"] = "The model has a few things that are wrong";
 				List<string> errors = new List<string>();
 				foreach (var value in ModelState.Values)
 				{

@@ -39,16 +39,16 @@ namespace Eshopping.Areas.Admin.Controllers
 				//kiểm tra xem nó có data chưa(có trả về tỉnh, quận, phương )ko 
 				if (existingShipping)
 				{
-					return Ok(new { duplicate = true, message = "Dữ liệu trùng lặp!" });
+					return Ok(new { duplicate = true, message = "Duplicate data!" });
 				}
 				_dataContext.Shippings.Add(shippingModel);
 				await _dataContext.SaveChangesAsync();
-				return Ok(new { success = true, message = "Thêm shipping thành công !" });
+				return Ok(new { success = true, message = "Shipping added successfully!" });
 
 			}
 			catch (Exception)
 			{
-				return StatusCode(500, "Có lỗi khi thêm shipping!");
+				return StatusCode(500, "There was an error adding shipping!");
 			}
 		}
 		public async Task<IActionResult> Delete(int Id)
@@ -56,7 +56,7 @@ namespace Eshopping.Areas.Admin.Controllers
 			ShippingModel shipping = await _dataContext.Shippings.FindAsync(Id);  //tìm đchi shipping dựa vào id của nó
 			_dataContext.Shippings.Remove(shipping);  //xóa 
 			await _dataContext.SaveChangesAsync();
-			TempData["success"] = "Địa chỉ shipping đã được xóa thành công!";
+			TempData["success"] = "The shipping address has been successfully deleted!";
 			return RedirectToAction("Index","Shipping");  //trả về action index của folder shipping 
 		}
 	}

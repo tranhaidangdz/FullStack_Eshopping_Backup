@@ -45,7 +45,7 @@ namespace Eshopping.Controllers
 			}
 			else
 			{
-				TempData["error"] = "Email không tìm thấy hoặc token không đúng!";
+				TempData["error"] = "EEmail not found or token incorrect!";
 				return RedirectToAction("ForgetPass", "Account");
 			}
 		}
@@ -65,7 +65,7 @@ namespace Eshopping.Controllers
 			var checkMail = await _userManage.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
 			if (checkMail == null)
 			{
-				TempData["error"] = "Email không tồn tại";
+				TempData["error"] = "Email does not exist";
 				return RedirectToAction("ForgetPass", "Account");
 			}
 			else
@@ -78,14 +78,14 @@ namespace Eshopping.Controllers
 
 				//update token to user
 				var receiver = checkMail.Email;
-				var subject = "Đổi mật khẩu cho tài khoản " + checkMail.Email;
-				var message = "Bấm vào link để đổi mật khẩu : " +
+				var subject = "Change password for account " + checkMail.Email;
+				var message = "Click on the link to change the password: " +
 				"<a href='" + $" {Request.Scheme}://{Request.Host}/Account/NewPass" +
 				$"?email=" + checkMail.Email + "&token=" + token + "'>";
 
 				await _emailSender.SendEmailAsync(receiver, subject, message);
 			}
-			TempData["success"] = "Đã gửi email đặt lại mật khẩu đến địa chỉ email của bạn!";
+			TempData["success"] = "A password reset email has been sent to your email address!";
 			return RedirectToAction("ForgetPass", "Account");
 		}
 
@@ -96,7 +96,7 @@ namespace Eshopping.Controllers
 		{
 			if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(user.Email))
 			{
-				TempData["error"] = "Token hoặc Email không hợp lệ!";
+				TempData["error"] = "Invalid Token or Email!";
 				return RedirectToAction("ForgetPass", "Account");
 			}
 
@@ -112,12 +112,12 @@ namespace Eshopping.Controllers
 				checkuser.Token = newtoken;
 				await _userManage.UpdateAsync(checkuser);
 
-				TempData["success"] = "Cập nhật mật khẩu mới thành công!";
+				TempData["success"] = "New password updated successfully!";
 				return RedirectToAction("Login", "Account");
 			}
 			else
 			{
-				TempData["error"] = "Không tìm thấy email hoặc token không đúng!";
+				TempData["error"] = "Email not found or incorrect token!";
 				return RedirectToAction("ForgetPass", "Account");
 			}
 		}
@@ -135,7 +135,7 @@ namespace Eshopping.Controllers
 					return Redirect(loginVM.ReturnUrl ?? "/"); // ??: nếu không cái trước thì cái sau
 				}
 
-				ModelState.AddModelError("", "Tên đăng nhập và mật khẩu không hợp lệ!");
+				ModelState.AddModelError("", "Invalid username and password!");
 			}
 			return View(loginVM);
 		}
@@ -195,7 +195,7 @@ namespace Eshopping.Controllers
 				IdentityResult result = await _userManage.CreateAsync(newUser, user.Password);
 				if (result.Succeeded)
 				{
-					TempData["success"] = "Tạo user thành công";
+					TempData["success"] = "Created user successfully";
 
 					// Thêm role mặc định cho user vừa tạo
 					var createUser = await _userManage.FindByEmailAsync(user.Email);

@@ -36,13 +36,13 @@ namespace Eshopping.Areas.Admin.Controllers
 
                 _dataContext.Add(coupon);
                 await _dataContext.SaveChangesAsync();
-                TempData["success"] = "Thêm giảm giá thành công";
+                TempData["success"] = "Add coupon successfully!";
                 return RedirectToAction("Index");
 
             }
             else
             {
-                TempData["error"] = "Model có 1 vài thứ đang bị lỗi";
+                TempData["error"] = "The model has a few things wrong!";
                 List<string> errors = new List<string>();
                 foreach (var value in ModelState.Values)
                 {

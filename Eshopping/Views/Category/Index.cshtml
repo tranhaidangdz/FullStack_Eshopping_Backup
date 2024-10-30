@@ -23,9 +23,9 @@
 
 							<img src="~/media/products/@item.Image" alt="@item.Name" width="100%" />
 							<h2>@item.Price.ToString("#,##0 VNĐ")</h2>
-							<p>Tên sản phẩm : @item.Name</p>
-							<p>Danh mục : @item.Category.Name</p>
-							<p>Thương hiệu : @item.Brand.Name</p>
+							<p>Product name : @item.Name</p>
+							<p>Category : @item.Category.Name</p>
+							<p>Brand : @item.Brand.Name</p>
 							@if (item.Quantity > 0)
 							{
 								<a class="btn btn-default add-to-cart" asp-action="Add" asp-controller="Cart" asp-route-Id="@item.Id">
@@ -36,7 +36,7 @@
 							{
 								<button type="button" class="btn btn-fefault">
 									<i class="fa fa-shopping-cart"></i>
-									Hết hàng
+									Sold out
 								</button>
 							}
 

@@ -57,13 +57,13 @@ namespace Eshopping.Areas.Admin.Controllers
 
 				_dataContext.Add(slider);
 				await _dataContext.SaveChangesAsync();
-				TempData["success"] = "Thêm slider thành công";  //slider: thanh trượt: chính là menu trượt ở giữa trang chủ mỗi trang web 
+				TempData["success"] = "Added slider successfully";  //slider: thanh trượt: chính là menu trượt ở giữa trang chủ mỗi trang web 
 				return RedirectToAction("Index");
 
 			}
 			else
 			{
-				TempData["error"] = "Model có 1 vài thứ đang bị lỗi";
+				TempData["error"] = "The model has a few things that are wrong";
 				List<string> errors = new List<string>();
 				foreach (var value in ModelState.Values)
 				{
@@ -112,13 +112,13 @@ namespace Eshopping.Areas.Admin.Controllers
 
 				_dataContext.Update(slider_exited);
 				await _dataContext.SaveChangesAsync();
-				TempData["success"] = "Cập nhật slider thành công";  //slider: thanh trượt: chính là menu trượt ở giữa trang chủ mỗi trang web 
+				TempData["success"] = "Updated slider successfully";  //slider: thanh trượt: chính là menu trượt ở giữa trang chủ mỗi trang web 
 				return RedirectToAction("Index");
 
 			}
 			else
 			{
-				TempData["error"] = "Model có 1 vài thứ đang bị lỗi";
+				TempData["error"] = "The model has a few things that are defective";
 				List<string> errors = new List<string>();
 				foreach (var value in ModelState.Values)
 				{
@@ -149,7 +149,7 @@ namespace Eshopping.Areas.Admin.Controllers
 			}
 			_dataContext.Sliders.Remove(slider);
 			await _dataContext.SaveChangesAsync();
-			TempData["error"] = "Sản phẩm đã xóa";
+			TempData["error"] = "Product has been deleted";
 			return RedirectToAction("Index");
 		}
 	}

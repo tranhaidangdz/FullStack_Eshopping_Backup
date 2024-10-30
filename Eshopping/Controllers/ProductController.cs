@@ -71,13 +71,13 @@ namespace Eshopping.Controllers
 				_dataContext.Ratings.Add(ratingEntity);  // thêm vào DBSet của entity
 				await _dataContext.SaveChangesAsync();
 
-				TempData["success"] = "Thêm đánh giá thành công!";
+				TempData["success"] = "Add successful review!";
 
 				return Redirect(Request.Headers["Referer"]);
 			}
 			else
 			{
-				TempData["error"] = "Hình như bạn chưa nhập tên, email và phần đánh giá của bạn";
+				TempData["error"] = "Looks like you haven't entered your name, email and review";
 				List<string> errors = new List<string>();
 				foreach (var value in ModelState.Values)
 				{

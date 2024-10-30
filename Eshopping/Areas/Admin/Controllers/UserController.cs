@@ -105,7 +105,7 @@ namespace Eshopping.Areas.Admin.Controllers
 			}
 			else
 			{
-				TempData["error"] = "Model có 1 vài thứ đang bị lỗi";
+				TempData["error"] = "The model has a few things that are wrong";
 				List<string> errors = new List<string>();
 				foreach (var value in ModelState.Values)
 				{
@@ -145,7 +145,7 @@ namespace Eshopping.Areas.Admin.Controllers
 			{
 				return View("Error");
 			}
-			TempData["success"] = "User đã xóa thành công ";
+			TempData["success"] = "Delete user successfully";
 			return RedirectToAction("Index");
 		}
 		//edit user:khi ta nhấn nút update thông tin mới 
@@ -201,7 +201,7 @@ namespace Eshopping.Areas.Admin.Controllers
 			var roles = await _roleManager.Roles.ToListAsync();
 			ViewBag.Roles = new SelectList(roles, "Id", "Name");
 
-			TempData["error"] = "Model có 1 vài thứ đang bị lỗi";
+			TempData["error"] = "The model has a few things that are wrong";
 			var errors = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
 
 			string errorMessage = string.Join("\n", errors);

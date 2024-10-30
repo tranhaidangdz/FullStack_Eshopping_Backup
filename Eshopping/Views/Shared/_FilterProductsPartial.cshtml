@@ -5,17 +5,17 @@
 <div class="container">
 	<div class="row">
 		<div class="col-md-2">
-			<h5>Sắp xếp theo</h5>
+			<h5>Sort by</h5>
 			<select class="form-control" id="sort_by">
 				<option>---------------</option>
-				<option value="@currentUrl?sort_by=price_increase">Giá tăng dần</option>
-				<option value="@currentUrl?sort_by=price_decrease">Giá giảm dần</option>
-				<option value="@currentUrl?sort_by=price_newest">Mới nhất</option>
-				<option value="@currentUrl?sort_by=price_oldest">Cũ nhất</option>
+				<option value="@currentUrl?sort_by=price_increase">Prices increase</option>
+				<option value="@currentUrl?sort_by=price_decrease">Prices decrease</option>
+				<option value="@currentUrl?sort_by=price_newest">Latest</option>
+				<option value="@currentUrl?sort_by=price_oldest">Oldest</option>
 			</select>
 		</div>
 		<div class="col-md-5">
-			<h5>Lọc theo giá</h5>
+			<h5>Sort by price</h5>
 			<form asp-action="Index" asp-controller="Category">
 				<p>
 					<label for="amount">Price range:</label>
@@ -23,7 +23,7 @@
 				</p>
 				@*thêm btn-locgia để sử dụng ajax lọc giá*@
 				<div id="slider-range"></div>
-				<button type="submit" name="logia" data-current_url="@currentUrl" class="btn btn-danger btn-locgia">Lọc</button>
+				<button type="submit" name="logia" data-current_url="@currentUrl" class="btn btn-danger btn-locgia">Filter</button>
 
 			</form>
 		</div>

@@ -47,7 +47,7 @@ namespace Eshopping.Areas.Admin.Controllers
 			try
 			{
 				await _dataContext.SaveChangesAsync();
-				return Ok(new { success = true, message = "Cập nhật trạng thái đơn hàng thành công !" });
+				return Ok(new { success = true, message = "Update order status successfully!" });
 			}catch(Exception ex)
 			{
 				return StatusCode(500, "An error orcurred while updating the order status!");

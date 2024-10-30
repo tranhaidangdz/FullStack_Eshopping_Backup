@@ -24,28 +24,28 @@
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
         <div class="form-group">
-            <label>Chọn</label>
-            <select class="css_select" id="tinh" name="tinh" title="Chọn Tỉnh Thành">
-                <option value="0">Tỉnh Thành</option>
+            <label>Select</label>
+        <select class="css_select" id="tinh" name="tinh" title="Select Province">
+                <option value="0">Province</option>
             </select>
         </div>
 
         <div class="form-group">
-            <label>Chọn</label>
-            <select class="css_select" id="quan" name="quan" title="Chọn Quận Huyện">
-                <option value="0">Quận Huyện</option>
+        <label>Select</label>
+        <select class="css_select" id="quan" name="quan" title="Select District">
+                <option value="0">District</option>
             </select>
         </div>
 
         <div class="form-group">
-            <label>Chọn</label>
-            <select class="css_select" id="phuong" name="phuong" title="Chọn Phường Xã">
-                <option value="0">Phường Xã</option>
+        <label>Select</label>
+            <select class="css_select" id="phuong" name="phuong" title="Select Communes">
+            <option value="0">Communes</option>
             </select>
         </div>
         
         <div class="form-group">
-            <label>Nhập Giá</label>
+        <label>Enter Price</label>
            <input asp-for="Price" id="price-shipping" class="form-control"/>
         </div>
 
@@ -59,7 +59,7 @@
     <table class="table table-striped" id="myTable">
         <thead>
             <tr>
-                <th scope="col">City</th>
+                <t scope="col">City</t>
                 <th scope="col">District</th>
                 <th scope="col">Ward</th>
 
@@ -82,7 +82,7 @@
                     <td>@shipping.Price.ToString("#,##0 VNĐ")</td>
 
                     <td>
-                        <a onclick="return confirm('Bạn có muốn xóa không?')" href="@Url.Action("Delete","Shipping",new{id=shipping.Id})" class="btn btn-danger">Delete</a> 
+                        <a onclick="return confirm('Do you want to delete?')" href="@Url.Action("Delete","Shipping",new{id=shipping.Id})" class="btn btn-danger">Delete</a>
                     </td>
                 </tr>
 
@@ -116,7 +116,7 @@
             var price = $("#price-shipping").val();
 
             if(tinh==''||quan==''||phuong==''||price==''){
-                Swal.fire("không được bỏ trống");
+                Swal.fire("cannot be left blank");
             }else{
                 $.ajax({
                     type: "POST",
@@ -126,11 +126,11 @@
                     success: function (result) {
                         //successful
                         if (result.success) {
-                            Swal.fire("Thêm vận chuyển thành công. Tải lại trang để thấy data");
+                            Swal.fire("Add shipping successfully. Reload the page to see the data");
                             //location.reload();  //xóa tỉnh thành phố cũ vừa chọn 
 
                         }else if(result.duplicate){
-                            Swal.fire("Dữ liệu trùng lặp");
+                            Swal.fire("Duplicate data");
                         }
                     }
                 });

@@ -50,20 +50,20 @@
 								<h2>@item.Price.ToString("#,##0 VNĐ")</h2>
 
 							<p> @item.Name</p>
-							<p>Danh mục : @item.Category.Name</p>
-							<p>Thương hiệu : @item.Brand.Name</p>
+							<p>Category : @item.Category.Name</p>
+							<p>Brand : @item.Brand.Name</p>
 							</a>
 
 							@*het hang*@
 							@if(item.Quantity > 0) {
 								<button class="btn btn-default add-to-cart" data-product_id="@item.Id">
-									<i class="fa fa-shopping-cart"></i>Thêm giỏ hàng
+									<i class="fa fa-shopping-cart"></i>Add to cart
 								</button>
 							}
 							else
 							{
 								<button class="btn btn-default ">
-									<i class="fa fa-shopping-cart"></i>Hết hàng
+									<i class="fa fa-shopping-cart"></i>Sold out
 								</button>
 							}
 								
@@ -86,8 +86,8 @@
 						@if (User.Identity?.IsAuthenticated ?? false)  //ta ktra nếu user đăng nhập mới cho bấm wishlist và compare
 						{
 							<ul class="nav nav-pills nav-justified">
-								<li><button class="btn btn-danger add-btn-wishlist" data-product_id="@item.Id"><i class="fa fa-plus-square "></i>Yêu thích</button></li>
-								<li><button class="btn btn-primary add-btn-compare" data-product_id="@item.Id"><i class="fa fa-plus-square "></i>So sánh</button></li>
+								<li><button class="btn btn-danger add-btn-wishlist" data-product_id="@item.Id"><i class="fa fa-plus-square "></i>Wishlist</button></li>
+								<li><button class="btn btn-primary add-btn-compare" data-product_id="@item.Id"><i class="fa fa-plus-square "></i>Compare</button></li>
 							</ul>
 						}
 					</div>
@@ -123,8 +123,8 @@
 											<h2>@item.Price.ToString("#,##0 VNĐ")</h2>
 
 											<p> @item.Name</p>
-											<p>Danh mục : @item.Category.Name</p>
-											<p>Thương hiệu : @item.Brand.Name</p>
+											<p>Category : @item.Category.Name</p>
+											<p>Brand : @item.Brand.Name</p>
 										</a>
 
 
@@ -151,8 +151,8 @@
 											<h2>@item.Price.ToString("#,##0 VNĐ")</h2>
 
 											<p> @item.Name</p>
-											<p>Danh mục : @item.Category.Name</p>
-											<p>Thương hiệu : @item.Brand.Name</p>
+											<p>Category : @item.Category.Name</p>
+											<p>Brand : @item.Brand.Name</p>
 										</a>
 
 									</div>
@@ -176,7 +176,7 @@
 
 </div>
 
-@* thay vì dùng form để thêm giỏ hàng ta sẽ dùng code ajax cho gọn : đây là thêm giỏ hàng ở trang chủ,còn thêm sp trong admin vẫn dùng code c#  *@
+@* thay vì dùng form để Add to cart ta sẽ dùng code ajax cho gọn : đây là Add to cart ở trang chủ,còn thêm sp trong admin vẫn dùng code c#  *@
 @section Scripts {
 <script>
 	$(document).ready(function () {
@@ -190,14 +190,14 @@
 				success: function (result) {
 					// Handle successful update
 					if (result) {
-						Swal.fire("Thêm giỏ hàng thành công!");
+						Swal.fire("Add to cart succeed!");
 					}
 				}
 			});
 		});
 	});
 </script>
-@* thêm sản phẩm yêu thích :add to wishlist *@
+@*  Wishlist :Wishlist *@
 <script>
 	$(document).ready(function () {
 		$('.add-btn-wishlist').click(function () {  //khi ta bấm nút thêm sp
@@ -210,14 +210,14 @@
 				success: function (result) {
 					// Handle successful update
 					if (result) {
-						Swal.fire("Thêm sản phẩm yêu thích thành công!");
+						Swal.fire(" Wishlist succeed!!");
 					}
 				}
 			});
 		});
 	});
 </script>
-@* thêm sản phẩm so sánh  :add to compare *@
+@*  Compare  :Compare *@
 <script>
 	$(document).ready(function () {
 		$('.add-btn-compare').click(function () {  //khi ta bấm nút thêm sp
@@ -230,7 +230,7 @@
 				success: function (result) {
 					// Handle successful update
 					if (result) {
-						Swal.fire("Thêm sản phẩm so sánh thành công!");
+						Swal.fire(" Compare succeed!!");
 					}
 				}
 			});

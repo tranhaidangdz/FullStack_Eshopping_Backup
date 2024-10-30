@@ -76,19 +76,19 @@ namespace Eshopping.Areas.Admin.Controllers
 
                 if (slug != null)
                 {
-                    ModelState.AddModelError("", "Danh mục này đã có trong Database");
+                    ModelState.AddModelError("", "This brand is already in the Database");
                     return View(brand);
                 }
 
                 _dataContext.Add(brand);
                 await _dataContext.SaveChangesAsync();
-                TempData["success"] = "Thêm thương hiệu thành công";
+                TempData["success"] = "Add brand successfully";
                 return RedirectToAction("Index");
 
             }
             else
             {
-                TempData["error"] = "Model có 1 vài thứ đang bị lỗi";
+                TempData["error"] = "The model has a few things that are wrong";
                 List<string> errors = new List<string>();
                 foreach (var value in ModelState.Values)
                 {
@@ -113,7 +113,7 @@ namespace Eshopping.Areas.Admin.Controllers
             _dataContext.Brands.Remove(brand);
             //sau khi xóa đi category ta phải gọi hàm save change thì nó mới lưu sự thay đổi CSDL
             await _dataContext.SaveChangesAsync();
-            TempData["success"] = "thương hiệu đã xóa";
+            TempData["success"] = "Brand has been deleted";
             return RedirectToAction("Index");
         }
 
@@ -136,7 +136,7 @@ namespace Eshopping.Areas.Admin.Controllers
 
 				if (slugExists != null)
 				{
-					ModelState.AddModelError("", "Thương hiệu này đã có trong Database");
+					ModelState.AddModelError("", "This brand is already in the Database");
 					return View(brand);
 				}
 
@@ -145,7 +145,7 @@ namespace Eshopping.Areas.Admin.Controllers
 
 				if (brandToUpdate == null)
 				{
-					TempData["error"] = "Không tìm thấy thương hiệu";
+					TempData["error"] = "Brand not found";
 					return RedirectToAction("Index");
 				}
 
@@ -158,12 +158,12 @@ namespace Eshopping.Areas.Admin.Controllers
 				// Lưu thay đổi vào CSDL
 				_dataContext.Update(brandToUpdate);
 				await _dataContext.SaveChangesAsync();
-				TempData["success"] = "Cập nhật thương hiệu thành công";
+				TempData["success"] = "Update brand successfully";
 				return RedirectToAction("Index");
 			}
 			else
 			{
-				TempData["error"] = "Model có 1 vài thứ đang bị lỗi";
+				TempData["error"] = "The model has a few things that are wrong";
 				List<string> errors = new List<string>();
 				foreach (var value in ModelState.Values)
 				{

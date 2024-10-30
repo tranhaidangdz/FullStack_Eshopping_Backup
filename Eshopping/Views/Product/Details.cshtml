@@ -17,26 +17,7 @@
 					<h3>ZOOM</h3>
 				</div>
 				<div id="similar-product" class="carousel slide" data-ride="carousel">
-
-					<!-- Wrapper for slides -->
-					<div class="carousel-inner">
-						<div class="item active">
-							<a href=""><img src="~/images/product-details/similar1.jpg" alt=""></a>
-							<a href=""><img src="~/images/product-details/similar2.jpg" alt=""></a>
-							<a href=""><img src="~/images/product-details/similar3.jpg" alt=""></a>
-						</div>
-						<div class="item">
-							<a href=""><img src="~/images/product-details/similar1.jpg" alt=""></a>
-							<a href=""><img src="~/images/product-details/similar2.jpg" alt=""></a>
-							<a href=""><img src="~/images/product-details/similar3.jpg" alt=""></a>
-						</div>
-						<div class="item">
-							<a href=""><img src="~/images/product-details/similar1.jpg" alt=""></a>
-							<a href=""><img src="~/images/product-details/similar2.jpg" alt=""></a>
-							<a href=""><img src="~/images/product-details/similar3.jpg" alt=""></a>
-						</div>
-
-					</div>
+					
 
 					<!-- Controls -->
 					<a class="left item-control" href="#similar-product" data-slide="prev">
@@ -60,16 +41,16 @@
 						<input type="text" value="3" />
 						@if(Model.ProductDetails.Quantity > 0)
 						{
-							<button type="button" class="btn btn-fefault cart">
+							<button type="button" class="btn btn-fefault cart add-to-cart">
 								<i class="fa fa-shopping-cart"></i>
-								Thêm giỏ hàng
+								Add to cart
 							</button>
 						}
 						else
 						{
 							<button type="button" class="btn btn-fefault">
 								<i class="fa fa-shopping-cart"></i>
-								Hết hàng
+								Sold out
 							</button>
 						}
 
@@ -84,162 +65,6 @@
 		</div><!--/product-details-->
 
 
-		<div class="category-tab shop-details-tab">
-			<!--category-tab-->
-			<div class="col-sm-12">
-				<ul class="nav nav-tabs">
-					<li class="active"><a href="#details" data-toggle="tab">Details</a></li>
-					<li><a href="#companyprofile" data-toggle="tab">Company Profile</a></li>
-					<li><a href="#tag" data-toggle="tab">Tag</a></li>
-					<li class="active"><a href="#reviews" data-toggle="tab">Reviews (5)</a></li>
-				</ul>
-			</div>
-			<div class="tab-content">
-				<div class="tab-pane fade active in" id="details">
-					@* lấy ra mô tả của sp đó từ csdl *@
-					@Html.Raw(@Model.ProductDetails.Description)
-
-
-				</div>
-
-				<div class="tab-pane fade" id="companyprofile">
-					<div class="col-sm-3">
-						<div class="product-image-wrapper">
-							<div class="single-products">
-								<div class="productinfo text-center">
-									<img src="images/home/gallery1.jpg" alt="" />
-									<h2>$56</h2>
-									<p>Easy Polo Black Edition</p>
-									<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-sm-3">
-						<div class="product-image-wrapper">
-							<div class="single-products">
-								<div class="productinfo text-center">
-									<img src="images/home/gallery3.jpg" alt="" />
-									<h2>$56</h2>
-									<p>Easy Polo Black Edition</p>
-									<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-sm-3">
-						<div class="product-image-wrapper">
-							<div class="single-products">
-								<div class="productinfo text-center">
-									<img src="images/home/gallery2.jpg" alt="" />
-									<h2>$56</h2>
-									<p>Easy Polo Black Edition</p>
-									<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-sm-3">
-						<div class="product-image-wrapper">
-							<div class="single-products">
-								<div class="productinfo text-center">
-									<img src="images/home/gallery4.jpg" alt="" />
-									<h2>$56</h2>
-									<p>Easy Polo Black Edition</p>
-									<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="tab-pane fade" id="tag">
-					<div class="col-sm-3">
-						<div class="product-image-wrapper">
-							<div class="single-products">
-								<div class="productinfo text-center">
-									<img src="images/home/gallery1.jpg" alt="" />
-									<h2>$56</h2>
-									<p>Easy Polo Black Edition</p>
-									<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-sm-3">
-						<div class="product-image-wrapper">
-							<div class="single-products">
-								<div class="productinfo text-center">
-									<img src="images/home/gallery2.jpg" alt="" />
-									<h2>$56</h2>
-									<p>Easy Polo Black Edition</p>
-									<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-sm-3">
-						<div class="product-image-wrapper">
-							<div class="single-products">
-								<div class="productinfo text-center">
-									<img src="images/home/gallery3.jpg" alt="" />
-									<h2>$56</h2>
-									<p>Easy Polo Black Edition</p>
-									<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-sm-3">
-						<div class="product-image-wrapper">
-							<div class="single-products">
-								<div class="productinfo text-center">
-									<img src="images/home/gallery4.jpg" alt="" />
-									<h2>$56</h2>
-									<p>Easy Polo Black Edition</p>
-									<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="tab-pane fade active in" id="reviews">
-					<div class="col-sm-12">
-						<ul>
-							<li><a href=""><i class="fa fa-user"></i>EUGEN</a></li>
-							<li><a href=""><i class="fa fa-clock-o"></i>12:41 PM</a></li>
-							<li><a href=""><i class="fa fa-calendar-o"></i>31 DEC 2014</a></li>
-						</ul>
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-						<p><b>Write Your Review</b></p>
-
-						<form autocomplete="off" asp-action="CommentProduct" asp-controller="Product" method="post">
-							<span>
-								<input type="hidden" asp-for="@Model.ProductDetails.Id" name="ProductId"/>
-								<input type="hidden" name="Star" value="5"/>
-
-								<input asp-for="@Model.Name" type="text" placeholder="Your Name" />
-								<span asp-validation-for="@Model.Name" class="text-danger"></span>
-
-								<input asp-for="@Model.Email" type="email" placeholder="Email Address" />
-								<span asp-validation-for="@Model.Email" class="text-danger"></span>
-
-							</span>
-
-							<textarea asp-for="@Model.Comment"></textarea>
-							<span asp-validation-for="@Model.Comment" class="text-danger"></span>
-
-							<b>Rating: </b> <img src="images/product-details/rating.png" alt="" />
-							<button type="submit" class="btn btn-default pull-right">
-								Submit
-							</button>
-						</form>
-					</div>
-				</div>
-
-			</div>
-		</div><!--/category-tab-->
 
 		<div class="recommended_items">
 			<!--recommended_items: sản phẩm liên quan -->
@@ -259,13 +84,13 @@
 											<a asp-action="Details" asp-controller="Product" asp-route-Id="@relatedProduct.Id">
 												<img src="~/media/products/@relatedProduct.Image" alt="@relatedProduct.Name" width="100%" />
 												<h2>$@relatedProduct.Price.ToString("#,##0 VNĐ")</h2>
-												<p>Tên sản phẩm : @relatedProduct.Name</p>
-												<p>Danh mục : @relatedProduct.Category.Name</p>
-												<p>Thương hiệu : @relatedProduct.Brand.Name</p>
+												<p>Product name: @relatedProduct.Name</p>
+												<p>Category : @relatedProduct.Category.Name</p>
+												<p>Brand : @relatedProduct.Brand.Name</p>
 											</a>
 
 										@* 	<button class="btn btn-default add-to-cart" data-product_id="@relatedProduct.Id">
-												<i class="fa fa-shopping-cart"></i>Thêm giỏ hàng
+												<i class="fa fa-shopping-cart"></i>Add to cart
 											</button> *@
 										</div>
 

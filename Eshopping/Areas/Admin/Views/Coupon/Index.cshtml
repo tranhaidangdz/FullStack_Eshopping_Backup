@@ -42,8 +42,8 @@
         <div class="form-group">
             <label>Status</label>
             <select asp-for="Status" class="form-control">
-                <option value="1">Hiển thị</option>
-                <option value="0">Ẩn</option>
+                <option value="1">Show</option>
+                <option value="0">Hide</option>
             </select>
             <span asp-validation-for="Status" class="text-danger"></span>
         </div>
@@ -84,15 +84,15 @@
                     @if(coupon.Status==1)
                     {
                         <select name="Status">
-                            <option selected value="1">Kích hoạt</option>
-                            <option value="0">Ẩn</option>
+                            <option selected value="1">Active</option>
+                            <option value="0">Hide</option>
                         </select>
                     }
                     else
                     {
                         <select name="Status">
-                            <option value="1">Kích hoạt</option>
-                            <option selected value="0">Ẩn</option>
+                                <option value="1">Active</option>
+                            <option selected value="0">Hide</option>
                         </select>
                     }
                 </td>

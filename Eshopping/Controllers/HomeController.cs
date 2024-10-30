@@ -49,7 +49,7 @@ namespace Eshopping.Controllers
             await _dataContext.SaveChangesAsync();
 
             //Đặt thông báo thành công và chuyển hướng
-            TempData["success"] = "So sánh đã được xóa thành công";
+            TempData["success"] = "The comparison has been successfully deleted";
             return View("Compare", "Home");
         }
 
@@ -63,7 +63,7 @@ namespace Eshopping.Controllers
             await _dataContext.SaveChangesAsync();
 
             //Đặt thông báo thành công và chuyển hướng
-            TempData["success"] = "Yêu thích đã được xóa thành công";
+            TempData["success"] = "The favorite has been successfully deleted";
             return View("Wishlist", "Home");
         }
         public async Task<IActionResult> Wishlist()
@@ -115,7 +115,7 @@ namespace Eshopping.Controllers
             var product = await _dataContext.Products.FindAsync(Id);
             if (product == null)
             {
-                return NotFound("Sản phẩm không tồn tại.");
+                return NotFound("Product does not exist.");
             }
 
             var wishlistProduct = new WishlistModel
@@ -128,11 +128,11 @@ namespace Eshopping.Controllers
 			try
             {
                 await _dataContext.SaveChangesAsync();
-                return Ok(new { success = true, message = "Đã thêm sản phẩm yêu thích !" });
+                return Ok(new { success = true, message = "Added favorite products!" });
             }
             catch(Exception)
             {
-                return StatusCode(500,"Đã xảy ra lỗi khi cập nhật trạng thái đơn hàng!");
+                return StatusCode(500, "An error occurred while updating order status!");
             }
         }  
         //THÊM SP SO SÁNH:
@@ -145,7 +145,7 @@ namespace Eshopping.Controllers
             var product = await _dataContext.Products.FindAsync(Id);
             if (product == null)
             {
-                return NotFound("Sản phẩm không tồn tại.");
+                return NotFound("Product does not exist.");
             }
 
 
@@ -158,11 +158,11 @@ namespace Eshopping.Controllers
             try
             {
                 await _dataContext.SaveChangesAsync();
-                return Ok(new { success = true, message = "Đã thêm sản phẩm so sánh !" });
+                return Ok(new { success = true, message = "Added comparison products!" });
             }
             catch(Exception)
             {
-                return StatusCode(500,"Đã xảy ra lỗi khi cập nhật trạng thái đơn hàng!");
+                return StatusCode(500, "An error occurred while updating order status!");
             }
         }
     }

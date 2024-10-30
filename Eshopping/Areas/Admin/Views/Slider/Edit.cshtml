@@ -27,12 +27,12 @@
             <select asp-for="Status" class="form-control">
                 @if (Model.Status == 1)
                 {
-                    <option value="1" selected>Hiển thị</option>
-                    <option value="0">Ẩn</option>
+                    <option value="1" selected>Show</option>
+                    <option value="0">Hide</option>
                 }else
                 {
-                    <option value="1">Hiển thị</option>
-                    <option value="0" selected>Ẩn</option>
+                    <option value="1">Show</option>
+                    <option value="0" selected>Hide</option>
                     
                 }
             </select>
@@ -66,7 +66,7 @@ Lưu ý cái này chỉ AD cho texarea thôi  *@
     <script>
 
         // khi ta chọn 1 hình ảnh mới nào đó để upload lên sp mới=>hàm readURL  nó sẽ cho ta thấy các file ảnh ta định chọn
-        //  (tức là hiển thị hình ảnh mới đó lên trang web luôn để ta nhìn thấy ảnh đó )
+        //  (tức là Show hình ảnh mới đó lên trang web luôn để ta nhìn thấy ảnh đó )
         //LƯU Ý: TA ĐANG VIẾT CHO TRANG CREATE PRODUCT, TỨC LÀ KHI ADD 1 ẢNH SP MƠI,NÓ SẼ CHO TA XEM TRC BỨC ẢNH ĐÓ
 
         $("#ImageUpload").change(function()
