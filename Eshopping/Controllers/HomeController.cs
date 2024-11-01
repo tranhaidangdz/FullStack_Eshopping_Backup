@@ -33,13 +33,10 @@ namespace Eshopping.Controllers
 
         public async Task<IActionResult> Compare()
         {
-			// ứng dụng sử dụng xác thực(authentication) và quyền hạn(authorization), thông tin người dùng sẽ được lưu trong Claims
-			var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Lấy ID người dùng hiện tại
 
 			var compare_product = await (from c in _dataContext.Compares
                                          join p in _dataContext.Products on c.ProductId equals p.Id
                                          join u in _dataContext.Users on c.UserId equals u.Id
-                                         where c.UserId == currentUserId
                                          select new { User = u, Product = p, Compares = c})
                                 .ToListAsync();
             return View(compare_product);
@@ -87,13 +84,10 @@ namespace Eshopping.Controllers
         }
         public async Task<IActionResult> Wishlist()
         {
-            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Lấy ID người dùng hiện tại
-
 
 			var wishlist_product = await (from w in _dataContext.Wishlists
                                           join p in _dataContext.Products on w.ProductId equals p.Id
                                           join u in _dataContext.Users on w.UserId equals u.Id
-										  where w.UserId == currentUserId // Điều kiện lọc theo UserId
 										  select new { Product = p, Wishlist = w })
                                 .ToListAsync();
             return View(wishlist_product);
