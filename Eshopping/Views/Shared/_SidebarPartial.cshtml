@@ -4,7 +4,7 @@
 			<!--category-productsr-->
 	
 
-			<vc:categories> </vc:categories>
+			@await Component.InvokeAsync("Categories")
 
 
 		</div><!--/category-products-->
@@ -12,9 +12,8 @@
 		<div class="brands_products">
 			<!--brands_products-->
 			<h2>Brands</h2>
-		
+			@await Component.InvokeAsync("Brands")
 
-			<vc:brands> </vc:brands>
 		</div><!--/brands_products-->
 
 	</div>

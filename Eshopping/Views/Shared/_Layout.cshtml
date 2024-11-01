@@ -77,10 +77,9 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.14.0/dist/sweetalert2.min.css
 								@if (User.Identity?.IsAuthenticated ?? false)  //ta ktra nếu user đăng nhập mới cho bấm wishlist và compare  
 								{
 									<li><a asp-controller="Account" asp-action="Logout"><i class="fa fa-lock"></i>Hi, @User.Identity.Name Logout</a></li>
-									<li><a asp-action="History" asp-controller="Account"><i class="fa fa-user"></i> Account</a></li>
+									<li><a asp-action="History" asp-controller="Account"><i class="fa fa-crosshairs"></i> Checkout</a></li>
 									<li><a asp-action="Wishlist" asp-controller="Home"><i class="fa fa-star"></i> Wishlist</a></li>
 									<li><a asp-action="Compare" asp-controller="Home"><i class="fa fa-star"></i> Compare</a></li>
-									<li><a href="checkout.html"><i class="fa fa-crosshairs"></i> Checkout</a></li>
 								}
 								else
 								{

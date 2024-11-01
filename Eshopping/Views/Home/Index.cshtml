@@ -209,8 +209,11 @@
 				data: { Id: Id }, // Send data to the server
 				success: function (result) {
 					// Handle successful update
-					if (result) {
+					if (result.success) {
 						Swal.fire(" Wishlist succeed!!");
+					}
+					else {
+                    Swal.fire("Error", result.message, "error");
 					}
 				}
 			});
@@ -229,12 +232,16 @@
 				data: { Id: Id }, // Send data to the server
 				success: function (result) {
 					// Handle successful update
-					if (result) {
-						Swal.fire(" Compare succeed!!");
+					if (result.success) {
+						Swal.fire("Success", result.message, "succeed!!"); // Swal.fire là một hàm của thư viện JavaScript có tên SweetAlert2
+					}
+					else {
+						Swal.fire("Error", result.message, "error");
 					}
 				}
 			});
 		});
 	});
 </script>
+
 }

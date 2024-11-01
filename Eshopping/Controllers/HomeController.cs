@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using System.Net;
+using System.Security.Claims;
 
 namespace Eshopping.Controllers
 {
@@ -31,9 +33,13 @@ namespace Eshopping.Controllers
 
         public async Task<IActionResult> Compare()
         {
-            var compare_product = await (from c in _dataContext.Compares
+			// ứng dụng sử dụng xác thực(authentication) và quyền hạn(authorization), thông tin người dùng sẽ được lưu trong Claims
+			var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Lấy ID người dùng hiện tại
+
+			var compare_product = await (from c in _dataContext.Compares
                                          join p in _dataContext.Products on c.ProductId equals p.Id
                                          join u in _dataContext.Users on c.UserId equals u.Id
+                                         where c.UserId == currentUserId
                                          select new { User = u, Product = p, Compares = c})
                                 .ToListAsync();
             return View(compare_product);
@@ -42,36 +48,53 @@ namespace Eshopping.Controllers
         public async Task<IActionResult> DeleteCompare(int Id)
         {
             //Tìm bản ghi theo id
-            CompareModel compare = await _dataContext.Compares.FindAsync(Id);
-            
+            CompareModel compare = _dataContext.Compares.FirstOrDefault(w => w.ProductId == Id);
+            // Kiểm tra nếu không tìm thấy bản ghi
+            if (compare == null)
+            {
+                TempData["error"] = $"The compare item id: {Id} could not be found.";
+                return RedirectToAction("Compare", "Home");
+            }
             //Xóa bản ghi và lưu thay đổi
             _dataContext.Compares.Remove(compare);
             await _dataContext.SaveChangesAsync();
 
             //Đặt thông báo thành công và chuyển hướng
             TempData["success"] = "The comparison has been successfully deleted";
-            return View("Compare", "Home");
+            return RedirectToAction("Compare", "Home");
         }
 
+        [HttpPost]
         public async Task<IActionResult> DeleteWishlist(int Id)
         {
             //Tìm bản ghi theo id
-            WishlistModel wishlist = await _dataContext.Wishlists.FindAsync(Id);
+            WishlistModel wishlist = _dataContext.Wishlists.FirstOrDefault(w => w.ProductId == Id);
 
-            //Xóa bản ghi và lưu thay đổi
-            _dataContext.Wishlists.Remove(wishlist);
+
+            // Kiểm tra nếu không tìm thấy bản ghi
+            if (wishlist == null)
+			{
+				TempData["error"] = $"The wishlist item {Id} could not be found.";
+				return RedirectToAction("Wishlist", "Home");
+			}
+			//Xóa bản ghi và lưu thay đổi
+			_dataContext.Wishlists.Remove(wishlist);
             await _dataContext.SaveChangesAsync();
 
             //Đặt thông báo thành công và chuyển hướng
             TempData["success"] = "The favorite has been successfully deleted";
-            return View("Wishlist", "Home");
+            return RedirectToAction("Wishlist", "Home");
         }
         public async Task<IActionResult> Wishlist()
         {
-            var wishlist_product = await (from w in _dataContext.Wishlists
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Lấy ID người dùng hiện tại
+
+
+			var wishlist_product = await (from w in _dataContext.Wishlists
                                           join p in _dataContext.Products on w.ProductId equals p.Id
                                           join u in _dataContext.Users on w.UserId equals u.Id
-                                          select new { Product = p, Wishlist = w })
+										  where w.UserId == currentUserId // Điều kiện lọc theo UserId
+										  select new { Product = p, Wishlist = w })
                                 .ToListAsync();
             return View(wishlist_product);
         }
@@ -84,7 +107,7 @@ namespace Eshopping.Controllers
 
 		//public IActionResult Contact()
 		//{
-
+         
 		//	return View();
 		//}
         //chuyển hưỚNG TỚI TRANG LIÊN HỆ:
@@ -93,6 +116,7 @@ namespace Eshopping.Controllers
             var contact = await _dataContext.Contact.FirstAsync();
             return View(contact);
         }
+
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error(int statuscode)
         {
@@ -123,7 +147,16 @@ namespace Eshopping.Controllers
                 ProductId = Id,
                 UserId = user.Id
             };
-			_dataContext.Wishlists.Add(wishlistProduct);
+
+            var productInWishlist = _dataContext.Wishlists.Where(w => w.ProductId == Id).FirstOrDefault();
+            if (productInWishlist == null)
+            {
+				_dataContext.Wishlists.Add(wishlistProduct);
+			}
+            else
+            {
+				return Ok(new { success = false, message = "Product already exist in wishlist!" });
+			}
 
 			try
             {
@@ -154,7 +187,18 @@ namespace Eshopping.Controllers
                 ProductId=Id,
                 UserId=user.Id
             };
-			_dataContext.Compares.Add(compareProduct);
+
+			var productInCompare = _dataContext.Compares.Where(w => w.ProductId == Id).FirstOrDefault();
+			if (productInCompare == null)
+			{
+				_dataContext.Compares.Add(compareProduct);
+			}
+			else
+			{
+				return Ok(new { success = false, message = "Product already exist in compare!" });
+			}
+
+			
             try
             {
                 await _dataContext.SaveChangesAsync();
